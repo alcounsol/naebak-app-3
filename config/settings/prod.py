@@ -80,6 +80,15 @@ LOGGING = {
     },
 }
 
+# Remove debug_toolbar from INSTALLED_APPS and MIDDLEWARE if present
+if 'debug_toolbar' in INSTALLED_APPS:
+    INSTALLED_APPS.remove('debug_toolbar')
+
+if 'debug_toolbar.middleware.DebugToolbarMiddleware' in MIDDLEWARE:
+    MIDDLEWARE.remove('debug_toolbar.middleware.DebugToolbarMiddleware')
+
+
+
 
 
 
