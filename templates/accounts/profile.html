@@ -1,0 +1,619 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }} - نائبك دوت كوم{% endblock %}
+
+{% block extra_css %}
+<style>
+    .profile-hero {
+        background: linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%);
+        color: white;
+        padding: 60px 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .profile-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('{% static "naebak/images/sisi-banner.jpg" %}') center/cover;
+        opacity: 0.1;
+        z-index: 0;
+    }
+
+    .profile-hero .container {
+        position: relative;
+        z-index: 1;
+    }
+
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 4px solid white;
+        margin: 0 auto 20px;
+        background: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48px;
+        color: #2E7D32;
+    }
+
+    .profile-stats {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        margin-top: -50px;
+        position: relative;
+        z-index: 2;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .stat-card {
+        text-align: center;
+        padding: 20px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #2E7D32;
+        display: block;
+    }
+
+    .stat-label {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+
+    .profile-section {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    .section-title {
+        color: #2E7D32;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e9ecef;
+        display: flex;
+        align-items: center;
+    }
+
+    .section-title i {
+        margin-right: 10px;
+        font-size: 1.2rem;
+    }
+
+    .info-item {
+        display: flex;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #f8f9fa;
+    }
+
+    .info-item:last-child {
+        border-bottom: none;
+    }
+
+    .info-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #2E7D32, #4CAF50);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin-right: 15px;
+    }
+
+    .info-content {
+        flex: 1;
+    }
+
+    .info-label {
+        font-weight: bold;
+        color: #495057;
+        font-size: 0.9rem;
+    }
+
+    .info-value {
+        color: #6c757d;
+        margin-top: 2px;
+    }
+
+    .activity-item {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        border-radius: 10px;
+        background: #f8f9fa;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+    }
+
+    .activity-item:hover {
+        background: #e9ecef;
+        transform: translateX(5px);
+    }
+
+    .activity-vote {
+        border-left-color: #28a745;
+    }
+
+    .activity-rating {
+        border-left-color: #ffc107;
+    }
+
+    .activity-message {
+        border-left-color: #007bff;
+    }
+
+    .activity-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin-right: 15px;
+        font-size: 1.2rem;
+    }
+
+    .activity-vote .activity-icon {
+        background: linear-gradient(135deg, #28a745, #20c997);
+    }
+
+    .activity-rating .activity-icon {
+        background: linear-gradient(135deg, #ffc107, #fd7e14);
+    }
+
+    .activity-message .activity-icon {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+    }
+
+    .activity-content {
+        flex: 1;
+    }
+
+    .activity-title {
+        font-weight: bold;
+        color: #495057;
+        margin-bottom: 5px;
+    }
+
+    .activity-desc {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    .activity-time {
+        color: #adb5bd;
+        font-size: 0.8rem;
+        margin-left: auto;
+    }
+
+    .vote-approve {
+        color: #28a745;
+        font-weight: bold;
+    }
+
+    .vote-disapprove {
+        color: #dc3545;
+        font-weight: bold;
+    }
+
+    .rating-stars {
+        color: #ffc107;
+        margin-right: 5px;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #6c757d;
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 20px;
+        opacity: 0.5;
+    }
+
+    .btn-action {
+        background: linear-gradient(135deg, #2E7D32, #4CAF50);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-action:hover {
+        background: linear-gradient(135deg, #1B5E20, #2E7D32);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
+    }
+
+    .vote-breakdown {
+        display: flex;
+        gap: 20px;
+        margin-top: 15px;
+    }
+
+    .vote-breakdown-item {
+        flex: 1;
+        text-align: center;
+        padding: 15px;
+        border-radius: 10px;
+        background: #f8f9fa;
+    }
+
+    .vote-breakdown-approve {
+        border-left: 4px solid #28a745;
+    }
+
+    .vote-breakdown-disapprove {
+        border-left: 4px solid #dc3545;
+    }
+
+    .vote-breakdown-number {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .vote-breakdown-approve .vote-breakdown-number {
+        color: #28a745;
+    }
+
+    .vote-breakdown-disapprove .vote-breakdown-number {
+        color: #dc3545;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <!-- Profile Hero Section -->
+    <section class="profile-hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h1 class="display-5 fw-bold mb-2">
+                        {% if user_profile.first_name and user_profile.last_name %}
+                            {{ user_profile.first_name }} {{ user_profile.last_name }}
+                        {% else %}
+                            {{ user_profile.username }}
+                        {% endif %}
+                    </h1>
+                    <p class="lead mb-0">مواطن مصري</p>
+                    <p class="mb-0">عضو منذ {{ user_profile.date_joined|date:"F Y" }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Profile Stats -->
+    <section class="container">
+        <div class="profile-stats">
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <span class="stat-number">{{ total_votes }}</span>
+                        <div class="stat-label">تصويت</div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <span class="stat-number">{{ total_ratings }}</span>
+                        <div class="stat-label">تقييم</div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <span class="stat-number">{{ total_messages }}</span>
+                        <div class="stat-label">رسالة</div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <span class="stat-number">{{ user_ratings_avg }}</span>
+                        <div class="stat-label">متوسط التقييم</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Profile Information -->
+    <section class="container my-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Personal Information -->
+                <div class="profile-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-user"></i>
+                        المعلومات الشخصية
+                    </h2>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-label">اسم المستخدم</div>
+                            <div class="info-value">{{ user_profile.username }}</div>
+                        </div>
+                    </div>
+
+                    {% if user_profile.first_name or user_profile.last_name %}
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-label">الاسم الكامل</div>
+                            <div class="info-value">{{ user_profile.first_name }} {{ user_profile.last_name }}</div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-label">البريد الإلكتروني</div>
+                            <div class="info-value">{{ user_profile.email|default:"غير محدد" }}</div>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-label">تاريخ التسجيل</div>
+                            <div class="info-value">{{ user_profile.date_joined|date:"d F Y" }}</div>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-label">آخر دخول</div>
+                            <div class="info-value">{{ user_profile.last_login|date:"d F Y - H:i"|default:"لم يسجل دخول من قبل" }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Voting History -->
+                <div class="profile-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-vote-yea"></i>
+                        تاريخ التصويت
+                    </h2>
+                    
+                    {% if total_votes > 0 %}
+                        <div class="vote-breakdown">
+                            <div class="vote-breakdown-item vote-breakdown-approve">
+                                <div class="vote-breakdown-number">{{ approve_votes }}</div>
+                                <div>تأييد</div>
+                            </div>
+                            <div class="vote-breakdown-item vote-breakdown-disapprove">
+                                <div class="vote-breakdown-number">{{ disapprove_votes }}</div>
+                                <div>معارضة</div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <h5>آخر التصويتات:</h5>
+                            {% for vote in user_votes %}
+                            <div class="activity-item activity-vote">
+                                <div class="activity-icon">
+                                    {% if vote.vote_type == 'approve' %}
+                                        <i class="fas fa-thumbs-up"></i>
+                                    {% else %}
+                                        <i class="fas fa-thumbs-down"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-title">
+                                        {% if vote.vote_type == 'approve' %}
+                                            <span class="vote-approve">تأييد</span>
+                                        {% else %}
+                                            <span class="vote-disapprove">معارضة</span>
+                                        {% endif %}
+                                        المرشح
+                                    </div>
+                                    <div class="activity-desc">{{ vote.candidate.name }}</div>
+                                </div>
+                                <div class="activity-time">{{ vote.timestamp|timesince }}</div>
+                            </div>
+                            {% endfor %}
+                            
+                            {% if total_votes > 10 %}
+                            <div class="text-center mt-3">
+                                <a href="#" class="btn-action">عرض جميع التصويتات ({{ total_votes }})</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="fas fa-vote-yea"></i>
+                            <h5>لم تقم بأي تصويت بعد</h5>
+                            <p>ابدأ بتصفح المرشحين وقم بالتصويت لمن تؤيده</p>
+                            <a href="{% url 'candidates:candidate_list' %}" class="btn-action">تصفح المرشحين</a>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Rating History -->
+                <div class="profile-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-star"></i>
+                        تاريخ التقييمات
+                    </h2>
+                    
+                    {% if total_ratings > 0 %}
+                        <div class="mb-3">
+                            <strong>متوسط التقييمات التي قدمتها: </strong>
+                            <span class="rating-stars">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= user_ratings_avg %}
+                                        <i class="fas fa-star"></i>
+                                    {% else %}
+                                        <i class="far fa-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </span>
+                            ({{ user_ratings_avg }})
+                        </div>
+
+                        <h5>آخر التقييمات:</h5>
+                        {% for rating in user_ratings %}
+                        <div class="activity-item activity-rating">
+                            <div class="activity-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">
+                                    تقييم {{ rating.candidate.name }}
+                                    <span class="rating-stars">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= rating.stars %}
+                                                <i class="fas fa-star"></i>
+                                            {% else %}
+                                                <i class="far fa-star"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </span>
+                                </div>
+                                {% if rating.comment %}
+                                <div class="activity-desc">{{ rating.comment|truncatechars:100 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="activity-time">{{ rating.timestamp|timesince }}</div>
+                        </div>
+                        {% endfor %}
+                        
+                        {% if total_ratings > 10 %}
+                        <div class="text-center mt-3">
+                            <a href="#" class="btn-action">عرض جميع التقييمات ({{ total_ratings }})</a>
+                        </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="fas fa-star"></i>
+                            <h5>لم تقم بأي تقييم بعد</h5>
+                            <p>قم بتقييم المرشحين لمساعدة المواطنين الآخرين</p>
+                            <a href="{% url 'candidates:candidate_list' %}" class="btn-action">تصفح المرشحين</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <!-- Messages Management -->
+                <div class="profile-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-envelope"></i>
+                        إدارة الرسائل
+                    </h2>
+                    
+                    {% if total_messages > 0 %}
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span><strong>إجمالي الرسائل المرسلة:</strong></span>
+                                <span class="badge bg-primary">{{ total_messages }}</span>
+                            </div>
+                        </div>
+
+                        <h6>آخر الرسائل:</h6>
+                        {% for message in user_messages %}
+                        <div class="activity-item activity-message">
+                            <div class="activity-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">{{ message.subject|truncatechars:30 }}</div>
+                                <div class="activity-desc">إلى: {{ message.candidate.name }}</div>
+                            </div>
+                            <div class="activity-time">{{ message.timestamp|timesince }}</div>
+                        </div>
+                        {% endfor %}
+                        
+                        <div class="text-center mt-3">
+                            <a href="{% url 'messaging:message_inbox' %}" class="btn-action">
+                                <i class="fas fa-envelope me-2"></i>
+                                عرض جميع الرسائل
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="fas fa-envelope"></i>
+                            <h6>لم ترسل أي رسائل بعد</h6>
+                            <p>ابدأ بالتواصل مع المرشحين</p>
+                            <a href="{% url 'candidates:candidate_list' %}" class="btn-action">تصفح المرشحين</a>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="profile-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-bolt"></i>
+                        إجراءات سريعة
+                    </h2>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'candidates:candidate_list' %}" class="btn-action text-center">
+                            <i class="fas fa-users me-2"></i>
+                            تصفح المرشحين
+                        </a>
+                        <a href="{% url 'core:governorates' %}" class="btn-action text-center">
+                            <i class="fas fa-map me-2"></i>
+                            تصفح المحافظات
+                        </a>
+                        <a href="{% url 'messaging:message_inbox' %}" class="btn-action text-center">
+                            <i class="fas fa-envelope me-2"></i>
+                            رسائلي
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+

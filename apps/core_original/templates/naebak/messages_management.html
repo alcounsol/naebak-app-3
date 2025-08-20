@@ -1,0 +1,450 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الرسائل - نائبك دوت كوم</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Tajawal', sans-serif;
+            direction: rtl;
+            text-align: right;
+        }
+        
+        .sidebar {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 250px;
+            z-index: 1000;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar .logo {
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .sidebar .logo img {
+            max-width: 150px;
+            height: auto;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.9);
+            padding: 1rem 1.5rem;
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateX(-5px);
+        }
+        
+        .main-content {
+            margin-right: 250px;
+            padding: 2rem;
+        }
+        
+        .page-header {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .page-header h1 {
+            color: #4CAF50;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .content-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .message-item {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .message-item:hover {
+            border-color: #4CAF50;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.1);
+        }
+        
+        .message-item.unread {
+            background: #e8f5e8;
+            border-color: #4CAF50;
+        }
+        
+        .message-item.unread::before {
+            content: '';
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            width: 10px;
+            height: 10px;
+            background: #4CAF50;
+            border-radius: 50%;
+        }
+        
+        .message-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .sender-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .sender-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #4CAF50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+        
+        .message-meta {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        
+        .message-subject {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .message-preview {
+            color: #6c757d;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .attachment-badge {
+            background: #2196F3;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+        
+        .filter-tabs {
+            margin-bottom: 2rem;
+        }
+        
+        .filter-tabs .nav-link {
+            color: #6c757d;
+            border: none;
+            border-radius: 20px;
+            padding: 0.5rem 1.5rem;
+            margin-left: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-tabs .nav-link.active {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            color: white;
+        }
+        
+        .search-box {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        
+        .search-box input {
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .search-box input:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+        }
+        
+        .search-box i {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #6c757d;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .stats-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            flex: 1;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #4CAF50;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="{% static 'naebak/images/logo-naebak-white.png' %}" alt="نائبك دوت كوم">
+        </div>
+        <nav class="nav flex-column">
+            <a class="nav-link" href="{% url 'naebak:candidate_dashboard' %}">
+                <i class="fas fa-tachometer-alt me-2"></i>لوحة التحكم
+            </a>
+            <a class="nav-link" href="{% url 'naebak:profile_management' %}">
+                <i class="fas fa-user-edit me-2"></i>إدارة الملف الشخصي
+            </a>
+            <a class="nav-link" href="{% url 'naebak:electoral_program_management' %}">
+                <i class="fas fa-list-check me-2"></i>البرنامج الانتخابي
+            </a>
+            <a class="nav-link" href="{% url 'naebak:service_history_management' %}">
+                <i class="fas fa-history me-2"></i>تاريخ العمل العام
+            </a>
+            <a class="nav-link active" href="{% url 'naebak:messages_management' %}">
+                <i class="fas fa-envelope me-2"></i>الرسائل
+            </a>
+            <a class="nav-link" href="{% url 'naebak:ratings_management' %}">
+                <i class="fas fa-star me-2"></i>التقييمات
+            </a>
+            <a class="nav-link" href="{% url 'naebak:voting_results' %}">
+                <i class="fas fa-chart-bar me-2"></i>نتائج التصويت
+            </a>
+            <hr class="my-3" style="border-color: rgba(255,255,255,0.2);">
+            <a class="nav-link" href="{% url 'naebak:candidate_logout' %}">
+                <i class="fas fa-sign-out-alt me-2"></i>تسجيل الخروج
+            </a>
+        </nav>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1><i class="fas fa-envelope me-3"></i>إدارة الرسائل</h1>
+            <p class="text-muted mb-0">اطلع على رسائل المواطنين وقم بالرد عليها</p>
+        </div>
+        
+        <!-- Statistics -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-number">{{ total_messages|default:0 }}</div>
+                <div class="stat-label">إجمالي الرسائل</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ unread_messages|default:0 }}</div>
+                <div class="stat-label">رسائل غير مقروءة</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ replied_messages|default:0 }}</div>
+                <div class="stat-label">رسائل تم الرد عليها</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ messages_with_attachments|default:0 }}</div>
+                <div class="stat-label">رسائل بمرفقات</div>
+            </div>
+        </div>
+        
+        <!-- Messages Content -->
+        <div class="content-card">
+            <!-- Filter Tabs -->
+            <ul class="nav filter-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" href="?filter=all">جميع الرسائل</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="?filter=unread">غير مقروءة</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="?filter=replied">تم الرد عليها</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="?filter=attachments">بمرفقات</a>
+                </li>
+            </ul>
+            
+            <!-- Search Box -->
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="البحث في الرسائل..." id="searchMessages">
+            </div>
+            
+            <!-- Messages List -->
+            {% if messages_list %}
+                {% for message in messages_list %}
+                <div class="message-item {% if not message.is_read %}unread{% endif %}" 
+                     onclick="window.location.href='{% url 'naebak:message_detail' message.id %}'">
+                    <div class="message-header">
+                        <div class="sender-info">
+                            <div class="sender-avatar">
+                                {{ message.sender_name|first|upper }}
+                            </div>
+                            <div>
+                                <div class="message-subject">{{ message.subject }}</div>
+                                <div class="message-meta">
+                                    من: {{ message.sender_name }} | {{ message.sender_email }}
+                                    {% if message.attachment %}
+                                        <span class="attachment-badge">
+                                            <i class="fas fa-paperclip me-1"></i>مرفق
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="message-meta">
+                            {{ message.created_at|date:"d/m/Y H:i" }}
+                            {% if message.is_replied %}
+                                <i class="fas fa-reply text-success ms-2" title="تم الرد"></i>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="message-preview">
+                        {{ message.content|truncatewords:20 }}
+                    </div>
+                </div>
+                {% endfor %}
+                
+                <!-- Pagination -->
+                {% if is_paginated %}
+                <nav aria-label="تصفح الرسائل" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">السابق</a>
+                            </li>
+                        {% endif %}
+                        
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">التالي</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <h4>لا توجد رسائل</h4>
+                    <p>لم تصلك أي رسائل من المواطنين بعد</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Search functionality
+        document.getElementById('searchMessages').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const messageItems = document.querySelectorAll('.message-item');
+            
+            messageItems.forEach(item => {
+                const subject = item.querySelector('.message-subject').textContent.toLowerCase();
+                const preview = item.querySelector('.message-preview').textContent.toLowerCase();
+                const sender = item.querySelector('.message-meta').textContent.toLowerCase();
+                
+                if (subject.includes(searchTerm) || preview.includes(searchTerm) || sender.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+        
+        // Mark message as read when clicked
+        document.querySelectorAll('.message-item').forEach(item => {
+            item.addEventListener('click', function() {
+                if (this.classList.contains('unread')) {
+                    // Send AJAX request to mark as read
+                    const messageId = this.getAttribute('data-message-id');
+                    fetch(`/candidate/messages/${messageId}/mark-read/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}',
+                            'Content-Type': 'application/json',
+                        },
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+

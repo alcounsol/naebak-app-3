@@ -1,0 +1,663 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }} - نائبك دوت كوم{% endblock %}
+
+{% block extra_css %}
+<style>
+    .messages-hero {
+        background: linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%);
+        color: white;
+        padding: 40px 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .messages-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('{% static "naebak/images/sisi-banner.jpg" %}') center/cover;
+        opacity: 0.1;
+        z-index: 0;
+    }
+
+    .messages-hero .container {
+        position: relative;
+        z-index: 1;
+    }
+
+    .messages-stats {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-top: -30px;
+        position: relative;
+        z-index: 2;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .stat-item {
+        text-align: center;
+        padding: 15px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        transition: all 0.3s ease;
+    }
+
+    .stat-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .stat-number {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #2E7D32;
+        display: block;
+    }
+
+    .stat-label {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+
+    .messages-section {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: between;
+        align-items: center;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #e9ecef;
+    }
+
+    .section-title {
+        color: #2E7D32;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    .section-title i {
+        margin-right: 10px;
+        font-size: 1.2rem;
+    }
+
+    .filter-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .filter-tab {
+        padding: 10px 20px;
+        border: 2px solid #e9ecef;
+        border-radius: 25px;
+        background: white;
+        color: #6c757d;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .filter-tab:hover {
+        border-color: #2E7D32;
+        color: #2E7D32;
+        text-decoration: none;
+    }
+
+    .filter-tab.active {
+        background: linear-gradient(135deg, #2E7D32, #4CAF50);
+        border-color: #2E7D32;
+        color: white;
+    }
+
+    .filter-tab.active:hover {
+        color: white;
+    }
+
+    .search-box {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 12px 45px 12px 20px;
+        border: 2px solid #e9ecef;
+        border-radius: 25px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+        border-color: #2E7D32;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+    }
+
+    .search-btn {
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: linear-gradient(135deg, #2E7D32, #4CAF50);
+        border: none;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .search-btn:hover {
+        background: linear-gradient(135deg, #1B5E20, #2E7D32);
+        transform: translateY(-50%) scale(1.05);
+    }
+
+    .message-item {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        border-radius: 12px;
+        background: #f8f9fa;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+        position: relative;
+    }
+
+    .message-item:hover {
+        background: #e9ecef;
+        transform: translateX(5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .message-sent {
+        border-left-color: #007bff;
+    }
+
+    .message-received {
+        border-left-color: #28a745;
+    }
+
+    .message-received.unread {
+        border-left-color: #ffc107;
+        background: #fff3cd;
+    }
+
+    .message-received.unread:hover {
+        background: #ffeaa7;
+    }
+
+    .message-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin-right: 15px;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+    }
+
+    .message-sent .message-icon {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+    }
+
+    .message-received .message-icon {
+        background: linear-gradient(135deg, #28a745, #20c997);
+    }
+
+    .message-received.unread .message-icon {
+        background: linear-gradient(135deg, #ffc107, #fd7e14);
+    }
+
+    .message-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .message-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+
+    .message-subject {
+        font-weight: bold;
+        color: #495057;
+        font-size: 1.1rem;
+        margin: 0;
+        text-decoration: none;
+    }
+
+    .message-subject:hover {
+        color: #2E7D32;
+        text-decoration: none;
+    }
+
+    .message-type-badge {
+        padding: 4px 12px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .badge-sent {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+
+    .badge-received {
+        background: #e8f5e8;
+        color: #2e7d32;
+    }
+
+    .badge-unread {
+        background: #fff3e0;
+        color: #f57c00;
+    }
+
+    .message-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    .message-candidate {
+        font-weight: 500;
+    }
+
+    .message-time {
+        font-size: 0.8rem;
+    }
+
+    .message-preview {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-top: 5px;
+        line-height: 1.4;
+    }
+
+    .message-actions {
+        display: flex;
+        gap: 10px;
+        margin-left: 15px;
+        flex-shrink: 0;
+    }
+
+    .action-btn {
+        padding: 8px 15px;
+        border: none;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .btn-view {
+        background: linear-gradient(135deg, #2E7D32, #4CAF50);
+        color: white;
+    }
+
+    .btn-view:hover {
+        background: linear-gradient(135deg, #1B5E20, #2E7D32);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #6c757d;
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        opacity: 0.5;
+    }
+
+    .empty-state h4 {
+        margin-bottom: 15px;
+        color: #495057;
+    }
+
+    .empty-state p {
+        margin-bottom: 25px;
+        font-size: 1.1rem;
+    }
+
+    .btn-primary-custom {
+        background: linear-gradient(135deg, #2E7D32, #4CAF50);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 25px;
+        font-weight: bold;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary-custom:hover {
+        background: linear-gradient(135deg, #1B5E20, #2E7D32);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
+    }
+
+    .unread-indicator {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 12px;
+        height: 12px;
+        background: #ffc107;
+        border-radius: 50%;
+        border: 2px solid white;
+    }
+
+    .pagination-custom {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+    .pagination-custom .page-link {
+        color: #2E7D32;
+        border-color: #e9ecef;
+        margin: 0 2px;
+        border-radius: 8px;
+    }
+
+    .pagination-custom .page-link:hover {
+        background-color: #2E7D32;
+        border-color: #2E7D32;
+        color: white;
+    }
+
+    .pagination-custom .page-item.active .page-link {
+        background-color: #2E7D32;
+        border-color: #2E7D32;
+    }
+
+    @media (max-width: 768px) {
+        .filter-tabs {
+            justify-content: center;
+        }
+        
+        .message-item {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .message-icon {
+            margin-right: 0;
+            margin-bottom: 15px;
+        }
+        
+        .message-actions {
+            margin-left: 0;
+            margin-top: 15px;
+            justify-content: center;
+        }
+        
+        .message-header {
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <!-- Messages Hero Section -->
+    <section class="messages-hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1 class="display-6 fw-bold mb-2">
+                        <i class="fas fa-envelope me-3"></i>
+                        إدارة الرسائل
+                    </h1>
+                    <p class="lead mb-0">تواصل مع المرشحين وتابع محادثاتك</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Messages Stats -->
+    <section class="container">
+        <div class="messages-stats">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="stat-item">
+                        <span class="stat-number">{{ total_sent }}</span>
+                        <div class="stat-label">رسالة مرسلة</div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="stat-item">
+                        <span class="stat-number">{{ total_received }}</span>
+                        <div class="stat-label">رد مستلم</div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="stat-item">
+                        <span class="stat-number">{{ unread_received }}</span>
+                        <div class="stat-label">رد غير مقروء</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Messages Management -->
+    <section class="container my-5">
+        <div class="messages-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-comments"></i>
+                    رسائلي ومحادثاتي
+                </h2>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <a href="?type=all{% if search_query %}&search={{ search_query }}{% endif %}" 
+                   class="filter-tab {% if message_type == 'all' %}active{% endif %}">
+                    <i class="fas fa-list"></i>
+                    جميع الرسائل
+                </a>
+                <a href="?type=sent{% if search_query %}&search={{ search_query }}{% endif %}" 
+                   class="filter-tab {% if message_type == 'sent' %}active{% endif %}">
+                    <i class="fas fa-paper-plane"></i>
+                    المرسلة ({{ total_sent }})
+                </a>
+                <a href="?type=received{% if search_query %}&search={{ search_query }}{% endif %}" 
+                   class="filter-tab {% if message_type == 'received' %}active{% endif %}">
+                    <i class="fas fa-inbox"></i>
+                    المستلمة ({{ total_received }})
+                    {% if unread_received > 0 %}
+                        <span class="badge bg-warning text-dark ms-1">{{ unread_received }}</span>
+                    {% endif %}
+                </a>
+            </div>
+
+            <!-- Search Box -->
+            <form method="GET" class="search-box">
+                <input type="hidden" name="type" value="{{ message_type }}">
+                <input type="text" name="search" value="{{ search_query }}" 
+                       placeholder="ابحث في الرسائل (الموضوع، المحتوى، اسم المرشح...)" 
+                       class="search-input">
+                <button type="submit" class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+
+            <!-- Messages List -->
+            {% if messages %}
+                {% for message in messages %}
+                <div class="message-item 
+                    {% if message.reply_to %}message-received{% if not message.is_read %} unread{% endif %}{% else %}message-sent{% endif %}">
+                    
+                    {% if message.reply_to and not message.is_read %}
+                        <div class="unread-indicator"></div>
+                    {% endif %}
+                    
+                    <div class="message-icon">
+                        {% if message.reply_to %}
+                            <i class="fas fa-reply"></i>
+                        {% else %}
+                            <i class="fas fa-paper-plane"></i>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="message-content">
+                        <div class="message-header">
+                            <a href="{% url 'naebak:message_thread' message.id %}" class="message-subject">
+                                {{ message.subject|truncatechars:60 }}
+                            </a>
+                            <span class="message-type-badge 
+                                {% if message.reply_to %}
+                                    {% if not message.is_read %}badge-unread{% else %}badge-received{% endif %}
+                                {% else %}
+                                    badge-sent
+                                {% endif %}">
+                                {% if message.reply_to %}
+                                    {% if not message.is_read %}جديد{% else %}رد{% endif %}
+                                {% else %}
+                                    مرسل
+                                {% endif %}
+                            </span>
+                        </div>
+                        
+                        <div class="message-meta">
+                            <span class="message-candidate">
+                                {% if message.reply_to %}
+                                    رد من: {{ message.candidate.name }}
+                                {% else %}
+                                    إلى: {{ message.candidate.name }}
+                                {% endif %}
+                            </span>
+                            <span class="message-time">{{ message.timestamp|timesince }}</span>
+                        </div>
+                        
+                        <div class="message-preview">
+                            {{ message.content|truncatechars:120 }}
+                        </div>
+                    </div>
+                    
+                    <div class="message-actions">
+                        <a href="{% url 'naebak:message_thread' message.id %}" class="action-btn btn-view">
+                            <i class="fas fa-eye"></i>
+                            عرض
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <!-- Pagination -->
+                {% if messages.has_other_pages %}
+                <nav aria-label="تنقل الصفحات" class="pagination-custom">
+                    <ul class="pagination">
+                        {% if messages.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ messages.previous_page_number }}{% if message_type != 'all' %}&type={{ message_type }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                        
+                        {% for num in messages.paginator.page_range %}
+                            {% if num == messages.number %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                            {% elif num > messages.number|add:'-3' and num < messages.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}{% if message_type != 'all' %}&type={{ message_type }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if messages.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ messages.next_page_number }}{% if message_type != 'all' %}&type={{ message_type }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+
+            {% else %}
+                <!-- Empty State -->
+                <div class="empty-state">
+                    <i class="fas fa-envelope-open"></i>
+                    <h4>
+                        {% if message_type == 'sent' %}
+                            لم ترسل أي رسائل بعد
+                        {% elif message_type == 'received' %}
+                            لم تستلم أي ردود بعد
+                        {% else %}
+                            لا توجد رسائل
+                        {% endif %}
+                    </h4>
+                    <p>
+                        {% if message_type == 'sent' %}
+                            ابدأ بالتواصل مع المرشحين وإرسال رسائلك
+                        {% elif message_type == 'received' %}
+                            عندما يرد المرشحون على رسائلك ستظهر هنا
+                        {% else %}
+                            ابدأ بالتواصل مع المرشحين
+                        {% endif %}
+                    </p>
+                    {% if message_type != 'received' %}
+                    <a href="{% url 'naebak:candidates' %}" class="btn-primary-custom">
+                        <i class="fas fa-users"></i>
+                        تصفح المرشحين
+                    </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}
+

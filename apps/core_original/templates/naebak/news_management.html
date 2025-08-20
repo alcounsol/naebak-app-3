@@ -1,0 +1,458 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }} - نائبك دوت كوم{% endblock %}
+
+{% block extra_css %}
+<style>
+    .stats-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        border-right: 5px solid var(--primary-color);
+        transition: transform 0.3s ease;
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .stats-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: var(--primary-color);
+        margin-bottom: 10px;
+    }
+    
+    .stats-label {
+        color: #666;
+        font-size: 1rem;
+        margin-bottom: 5px;
+    }
+    
+    .news-item {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        border-right: 4px solid var(--primary-color);
+    }
+    
+    .news-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    
+    .news-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 5px;
+    }
+    
+    .news-meta {
+        color: #666;
+        font-size: 0.9rem;
+    }
+    
+    .news-content {
+        color: #555;
+        margin-bottom: 15px;
+        line-height: 1.6;
+    }
+    
+    .news-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    
+    .status-badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    
+    .status-draft {
+        background: #ffc107;
+        color: #856404;
+    }
+    
+    .status-published {
+        background: #28a745;
+        color: white;
+    }
+    
+    .status-archived {
+        background: #6c757d;
+        color: white;
+    }
+    
+    .priority-badge {
+        padding: 3px 8px;
+        border-radius: 15px;
+        font-size: 0.7rem;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+    
+    .priority-low {
+        background: #e9ecef;
+        color: #6c757d;
+    }
+    
+    .priority-normal {
+        background: #cce5ff;
+        color: #0066cc;
+    }
+    
+    .priority-high {
+        background: #ffe6cc;
+        color: #cc6600;
+    }
+    
+    .priority-urgent {
+        background: #ffcccc;
+        color: #cc0000;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.7; }
+        100% { opacity: 1; }
+    }
+    
+    .search-filters {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .btn-create {
+        background: var(--primary-color);
+        border: none;
+        color: white;
+        padding: 12px 25px;
+        border-radius: 25px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-create:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    
+    .btn-edit {
+        background: #17a2b8;
+        border: none;
+        color: white;
+        padding: 8px 15px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+    }
+    
+    .btn-delete {
+        background: #dc3545;
+        border: none;
+        color: white;
+        padding: 8px 15px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+    }
+    
+    .btn-toggle {
+        background: #6c757d;
+        border: none;
+        color: white;
+        padding: 8px 15px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+    }
+    
+    .pagination {
+        justify-content: center;
+        margin-top: 30px;
+    }
+    
+    .pagination .page-link {
+        color: var(--primary-color);
+        border: 1px solid #dee2e6;
+        padding: 10px 15px;
+    }
+    
+    .pagination .page-link:hover {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        color: white;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #666;
+    }
+    
+    .empty-state i {
+        font-size: 4rem;
+        color: #ddd;
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>
+                    <i class="fas fa-newspaper me-2"></i>
+                    إدارة الأخبار
+                </h2>
+                <a href="{% url 'naebak:create_news' %}" class="btn btn-create">
+                    <i class="fas fa-plus me-2"></i>
+                    إنشاء خبر جديد
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stats-card text-center">
+                <div class="stats-number">{{ stats.total_news }}</div>
+                <div class="stats-label">إجمالي الأخبار</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card text-center">
+                <div class="stats-number">{{ stats.published_news }}</div>
+                <div class="stats-label">الأخبار المنشورة</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card text-center">
+                <div class="stats-number">{{ stats.draft_news }}</div>
+                <div class="stats-label">المسودات</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card text-center">
+                <div class="stats-number">{{ stats.urgent_news }}</div>
+                <div class="stats-label">الأخبار العاجلة</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Search and Filters -->
+    <div class="search-filters">
+        <form method="GET" class="row g-3">
+            <div class="col-md-4">
+                <label for="search" class="form-label">البحث في الأخبار</label>
+                <input type="text" class="form-control" id="search" name="search" 
+                       value="{{ search_query }}" placeholder="البحث في العنوان أو المحتوى...">
+            </div>
+            <div class="col-md-3">
+                <label for="status" class="form-label">حالة الخبر</label>
+                <select class="form-select" id="status" name="status">
+                    <option value="">جميع الحالات</option>
+                    {% for value, label in status_choices %}
+                    <option value="{{ value }}" {% if status_filter == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="priority" class="form-label">الأولوية</label>
+                <select class="form-select" id="priority" name="priority">
+                    <option value="">جميع الأولويات</option>
+                    {% for value, label in priority_choices %}
+                    <option value="{{ value }}" {% if priority_filter == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">&nbsp;</label>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search me-2"></i>
+                        بحث
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <!-- News List -->
+    {% if news_page %}
+        {% for news in news_page %}
+        <div class="news-item">
+            <div class="news-header">
+                <div>
+                    <div class="news-title">{{ news.title }}</div>
+                    <div class="news-meta">
+                        <i class="fas fa-user me-1"></i>
+                        {{ news.author.get_full_name }}
+                        <i class="fas fa-calendar me-1 ms-3"></i>
+                        {{ news.created_at|date:"d/m/Y H:i" }}
+                        <i class="fas fa-eye me-1 ms-3"></i>
+                        {{ news.views_count }} مشاهدة
+                        {% if news.show_on_ticker %}
+                            <i class="fas fa-broadcast-tower me-1 ms-3" title="يظهر في الشريط الإخباري"></i>
+                        {% endif %}
+                        {% if news.show_on_homepage %}
+                            <i class="fas fa-home me-1 ms-3" title="يظهر في الصفحة الرئيسية"></i>
+                        {% endif %}
+                    </div>
+                </div>
+                <div>
+                    <span class="status-badge status-{{ news.status }}">
+                        {{ news.get_status_display }}
+                    </span>
+                    <span class="priority-badge priority-{{ news.priority }}">
+                        {{ news.get_priority_display }}
+                    </span>
+                </div>
+            </div>
+            
+            <div class="news-content">
+                {{ news.content|truncatewords:30 }}
+            </div>
+            
+            <div class="news-actions">
+                <a href="{% url 'naebak:news_detail' news.id %}" class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-eye me-1"></i>
+                    عرض
+                </a>
+                <a href="{% url 'naebak:edit_news' news.id %}" class="btn btn-sm btn-edit">
+                    <i class="fas fa-edit me-1"></i>
+                    تعديل
+                </a>
+                <button class="btn btn-sm btn-toggle" onclick="toggleNewsStatus({{ news.id }}, '{% if news.status == 'published' %}draft{% else %}published{% endif %}')">
+                    <i class="fas fa-toggle-{% if news.status == 'published' %}off{% else %}on{% endif %} me-1"></i>
+                    {% if news.status == 'published' %}إيقاف{% else %}نشر{% endif %}
+                </button>
+                <a href="{% url 'naebak:delete_news' news.id %}" class="btn btn-sm btn-delete" 
+                   onclick="return confirm('هل أنت متأكد من حذف هذا الخبر؟')">
+                    <i class="fas fa-trash me-1"></i>
+                    حذف
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+        
+        <!-- Pagination -->
+        {% if news_page.has_other_pages %}
+        <nav aria-label="تصفح الأخبار">
+            <ul class="pagination">
+                {% if news_page.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if priority_filter %}&priority={{ priority_filter }}{% endif %}">الأولى</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ news_page.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if priority_filter %}&priority={{ priority_filter }}{% endif %}">السابقة</a>
+                </li>
+                {% endif %}
+                
+                {% for num in news_page.paginator.page_range %}
+                {% if news_page.number == num %}
+                <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                </li>
+                {% elif num > news_page.number|add:'-3' and num < news_page.number|add:'3' %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if priority_filter %}&priority={{ priority_filter }}{% endif %}">{{ num }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+                
+                {% if news_page.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ news_page.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if priority_filter %}&priority={{ priority_filter }}{% endif %}">التالية</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ news_page.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if priority_filter %}&priority={{ priority_filter }}{% endif %}">الأخيرة</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    {% else %}
+        <div class="empty-state">
+            <i class="fas fa-newspaper"></i>
+            <h4>لا توجد أخبار</h4>
+            <p>لم يتم إنشاء أي أخبار حتى الآن</p>
+            <a href="{% url 'naebak:create_news' %}" class="btn btn-create mt-3">
+                <i class="fas fa-plus me-2"></i>
+                إنشاء أول خبر
+            </a>
+        </div>
+    {% endif %}
+    
+    <!-- Back to Admin Panel -->
+    <div class="text-center mt-4">
+        <a href="{% url 'naebak:admin_panel' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-right me-2"></i>
+            العودة للوحة الإدارة
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function toggleNewsStatus(newsId, newStatus) {
+    if (confirm('هل أنت متأكد من تغيير حالة هذا الخبر؟')) {
+        fetch(`/admin-panel/news/toggle-status/${newsId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: `status=${newStatus}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('حدث خطأ: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('حدث خطأ أثناء تغيير حالة الخبر');
+        });
+    }
+}
+
+// Auto-refresh every 30 seconds for urgent news
+setTimeout(function() {
+    if (document.querySelector('.priority-urgent')) {
+        location.reload();
+    }
+}, 30000);
+</script>
+{% endblock %}
+

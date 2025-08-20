@@ -1,0 +1,362 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-hero {
+        background: linear-gradient(135deg, #2E8B57 0%, #228B22 100%);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+    }
+    
+    .stats-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-left: 4px solid #2E8B57;
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    .stats-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #2E8B57;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stats-label {
+        color: #666;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .quick-actions {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+    
+    .action-btn {
+        display: inline-block;
+        background: #2E8B57;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        margin: 0.25rem;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+    
+    .action-btn:hover {
+        background: #228B22;
+        color: white;
+        text-decoration: none;
+        transform: translateY(-2px);
+    }
+    
+    .action-btn.secondary {
+        background: #17a2b8;
+    }
+    
+    .action-btn.secondary:hover {
+        background: #138496;
+    }
+    
+    .action-btn.warning {
+        background: #ffc107;
+        color: #212529;
+    }
+    
+    .action-btn.warning:hover {
+        background: #e0a800;
+        color: #212529;
+    }
+    
+    .recent-activity {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+    
+    .activity-item {
+        padding: 1rem;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+    }
+    
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+    
+    .activity-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 1rem;
+        font-size: 1.2rem;
+    }
+    
+    .activity-icon.message {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+    
+    .activity-icon.rating {
+        background: #fff3e0;
+        color: #f57c00;
+    }
+    
+    .activity-content {
+        flex: 1;
+    }
+    
+    .activity-title {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+    
+    .activity-meta {
+        color: #666;
+        font-size: 0.85rem;
+    }
+    
+    .rating-stars {
+        color: #ffc107;
+        margin: 0 0.5rem;
+    }
+    
+    .welcome-section {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .candidate-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        margin-bottom: 1rem;
+    }
+    
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .content-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+        .content-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-hero">
+    <div class="container">
+        <div class="welcome-section">
+            {% if candidate.profile_image %}
+                <img src="{{ candidate.profile_image.url }}" alt="{{ candidate.name }}" class="candidate-avatar">
+            {% else %}
+                <div class="candidate-avatar" style="background: #ddd; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #666;">
+                    <i class="fas fa-user"></i>
+                </div>
+            {% endif %}
+            <h1 class="mb-2">مرحباً {{ candidate.name }}</h1>
+            <p class="mb-0">{{ candidate.position }} - {{ candidate.governorate.name }}</p>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Statistics Cards -->
+    <div class="dashboard-grid">
+        <div class="stats-card">
+            <div class="stats-number">{{ total_messages }}</div>
+            <div class="stats-label">إجمالي الرسائل</div>
+            {% if unread_messages > 0 %}
+                <small class="text-danger">{{ unread_messages }} رسالة غير مقروءة</small>
+            {% endif %}
+        </div>
+        
+        <div class="stats-card">
+            <div class="stats-number">{{ avg_rating }}</div>
+            <div class="stats-label">متوسط التقييم</div>
+            <small class="text-muted">من {{ total_ratings }} تقييم</small>
+        </div>
+        
+        <div class="stats-card">
+            <div class="stats-number">{{ approval_percentage }}%</div>
+            <div class="stats-label">نسبة التأييد</div>
+            <small class="text-success">{{ approve_votes }} تأييد</small> | 
+            <small class="text-danger">{{ disapprove_votes }} معارضة</small>
+        </div>
+        
+        <div class="stats-card">
+            <div class="stats-number">{{ promises_count }}</div>
+            <div class="stats-label">الوعود الانتخابية</div>
+        </div>
+        
+        <div class="stats-card">
+            <div class="stats-number">{{ profile_completion }}%</div>
+            <div class="stats-label">اكتمال الملف الشخصي</div>
+            {% if profile_completion < 80 %}
+                <small class="text-warning">يحتاج تحديث</small>
+            {% else %}
+                <small class="text-success">مكتمل</small>
+            {% endif %}
+        </div>
+        
+        <div class="stats-card">
+            <div class="stats-number">{{ social_links_count }}</div>
+            <div class="stats-label">الروابط الاجتماعية</div>
+            <small class="text-muted">من 4 روابط</small>
+        </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <h4 class="mb-3"><i class="fas fa-bolt"></i> الإجراءات السريعة</h4>
+        <a href="{% url 'core:candidate_profile_edit' %}" class="action-btn">
+            <i class="fas fa-user-edit"></i> تعديل الملف الشخصي
+        </a>
+        <a href="{% url 'core:candidate_electoral_program' %}" class="action-btn secondary">
+            <i class="fas fa-file-alt"></i> البرنامج الانتخابي
+        </a>
+        <a href="{% url 'core:candidate_promises' %}" class="action-btn warning">
+            <i class="fas fa-handshake"></i> الوعود الانتخابية
+        </a>
+        <a href="{% url 'messaging:message_inbox' %}" class="action-btn">
+            <i class="fas fa-envelope"></i> الرسائل الواردة
+            {% if unread_messages > 0 %}
+                <span class="badge badge-light">{{ unread_messages }}</span>
+            {% endif %}
+        </a>
+        <a href="{% url 'core:candidate_ratings_votes' %}" class="action-btn secondary">
+            <i class="fas fa-chart-bar"></i> التقييمات والتصويتات
+        </a>
+    </div>
+    
+    <div class="content-grid">
+        <!-- Recent Messages -->
+        <div class="recent-activity">
+            <h4 class="mb-3"><i class="fas fa-envelope"></i> الرسائل الحديثة</h4>
+            {% if recent_messages %}
+                {% for message in recent_messages %}
+                    <div class="activity-item">
+                        <div class="activity-icon message">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">{{ message.subject|truncatechars:50 }}</div>
+                            <div class="activity-meta">
+                                من: {{ message.sender_name }} - {{ message.timestamp|timesince }} مضت
+                                {% if not message.is_read %}
+                                    <span class="badge badge-primary">جديد</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="text-center mt-3">
+                    <a href="{% url 'messaging:message_inbox' %}" class="btn btn-outline-primary">
+                        عرض جميع الرسائل
+                    </a>
+                </div>
+            {% else %}
+                <div class="text-center text-muted py-4">
+                    <i class="fas fa-inbox fa-3x mb-3"></i>
+                    <p>لا توجد رسائل حتى الآن</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Recent Ratings -->
+        <div class="recent-activity">
+            <h4 class="mb-3"><i class="fas fa-star"></i> التقييمات الحديثة</h4>
+            {% if recent_ratings %}
+                {% for rating in recent_ratings %}
+                    <div class="activity-item">
+                        <div class="activity-icon rating">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">
+                                <span class="rating-stars">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= rating.stars %}
+                                            <i class="fas fa-star"></i>
+                                        {% else %}
+                                            <i class="far fa-star"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </span>
+                            </div>
+                            <div class="activity-meta">
+                                {% if rating.comment %}
+                                    {{ rating.comment|truncatechars:60 }}<br>
+                                {% endif %}
+                                {{ rating.timestamp|timesince }} مضت
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="text-center mt-3">
+                    <a href="{% url 'core:candidate_ratings_votes' %}" class="btn btn-outline-warning">
+                        عرض جميع التقييمات
+                    </a>
+                </div>
+            {% else %}
+                <div class="text-center text-muted py-4">
+                    <i class="fas fa-star fa-3x mb-3"></i>
+                    <p>لا توجد تقييمات حتى الآن</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Auto-refresh notifications every 30 seconds
+    setInterval(function() {
+        // You can add AJAX call here to refresh stats if needed
+    }, 30000);
+</script>
+{% endblock %}
+

@@ -1,0 +1,427 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة تاريخ العمل العام - نائبك دوت كوم</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Tajawal', sans-serif;
+            direction: rtl;
+            text-align: right;
+        }
+        
+        .sidebar {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 250px;
+            z-index: 1000;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar .logo {
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .sidebar .logo img {
+            max-width: 150px;
+            height: auto;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.9);
+            padding: 1rem 1.5rem;
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateX(-5px);
+        }
+        
+        .main-content {
+            margin-right: 250px;
+            padding: 2rem;
+        }
+        
+        .page-header {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .page-header h1 {
+            color: #4CAF50;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .content-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .history-item {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .history-item:hover {
+            border-color: #4CAF50;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.1);
+        }
+        
+        .history-item::before {
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            background: #4CAF50;
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+        
+        .year-badge {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            border: none;
+            border-radius: 30px;
+            padding: 0.75rem 2rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+            border: none;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.3);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            border: none;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+        
+        .modal-content {
+            border-radius: 15px;
+            border: none;
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            color: white;
+            border-radius: 15px 15px 0 0;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #6c757d;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-right: 30px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="{% static 'naebak/images/logo-naebak-white.png' %}" alt="نائبك دوت كوم">
+        </div>
+        <nav class="nav flex-column">
+            <a class="nav-link" href="{% url 'core:candidate_dashboard' %}">
+                <i class="fas fa-tachometer-alt me-2"></i>لوحة التحكم
+            </a>
+            <a class="nav-link" href="{% url 'core:profile_management' %}">
+                <i class="fas fa-user-edit me-2"></i>إدارة الملف الشخصي
+            </a>
+            <a class="nav-link" href="{% url 'core:electoral_program_management' %}">
+                <i class="fas fa-list-check me-2"></i>البرنامج الانتخابي
+            </a>
+            <a class="nav-link active" href="{% url 'core:service_history_management' %}">
+                <i class="fas fa-history me-2"></i>تاريخ العمل العام
+            </a>
+            <a class="nav-link" href="{% url 'core:messages_management' %}">
+                <i class="fas fa-envelope me-2"></i>الرسائل
+            </a>
+            <a class="nav-link" href="{% url 'core:ratings_management' %}">
+                <i class="fas fa-star me-2"></i>التقييمات
+            </a>
+            <a class="nav-link" href="{% url 'core:voting_results' %}">
+                <i class="fas fa-chart-bar me-2"></i>نتائج التصويت
+            </a>
+            <hr class="my-3" style="border-color: rgba(255,255,255,0.2);">
+            <a class="nav-link" href="{% url 'core:candidate_logout' %}">
+                <i class="fas fa-sign-out-alt me-2"></i>تسجيل الخروج
+            </a>
+        </nav>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1><i class="fas fa-history me-3"></i>إدارة تاريخ العمل العام</h1>
+                    <p class="text-muted mb-0">قم بإضافة وتعديل تاريخك في العمل العام والمناصب التي شغلتها</p>
+                </div>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addHistoryModal">
+                    <i class="fas fa-plus me-2"></i>إضافة منصب جديد
+                </button>
+            </div>
+        </div>
+        
+        <!-- Service History Timeline -->
+        <div class="content-card">
+            <h3 class="mb-4"><i class="fas fa-briefcase me-2"></i>تاريخ العمل العام</h3>
+            
+            {% if service_history %}
+                <div class="timeline">
+                    {% for history in service_history %}
+                    <div class="history-item" data-history-id="{{ history.id }}">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="year-badge me-3">{{ history.year }}</span>
+                                    <h5 class="mb-0">{{ history.position }}</h5>
+                                </div>
+                                <p class="text-muted mb-2">{{ history.organization }}</p>
+                                <p class="mb-2">{{ history.description }}</p>
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>تم الإضافة: {{ history.created_at|date:"d/m/Y" }}
+                                </small>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-warning btn-sm" onclick="editHistory({{ history.id }}, '{{ history.year }}', '{{ history.position }}', '{{ history.organization }}', '{{ history.description }}')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteHistory({{ history.id }})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-briefcase"></i>
+                    <h4>لا يوجد تاريخ عمل عام</h4>
+                    <p>ابدأ بإضافة تاريخك في العمل العام والمناصب التي شغلتها</p>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addHistoryModal">
+                        <i class="fas fa-plus me-2"></i>إضافة أول منصب
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Add History Modal -->
+    <div class="modal fade" id="addHistoryModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">إضافة منصب جديد</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="post" action="{% url 'core:add_service_history' %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="historyYear" class="form-label">السنة</label>
+                                <input type="number" class="form-control" id="historyYear" name="year" min="1950" max="2030" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="historyPosition" class="form-label">المنصب</label>
+                                <input type="text" class="form-control" id="historyPosition" name="position" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="historyOrganization" class="form-label">الجهة/المؤسسة</label>
+                            <input type="text" class="form-control" id="historyOrganization" name="organization" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="historyDescription" class="form-label">وصف المهام والإنجازات</label>
+                            <textarea class="form-control" id="historyDescription" name="description" rows="4" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                        <button type="submit" class="btn btn-primary">حفظ المنصب</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit History Modal -->
+    <div class="modal fade" id="editHistoryModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">تعديل المنصب</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="post" action="{% url 'core:edit_service_history' %}">
+                    {% csrf_token %}
+                    <input type="hidden" id="editHistoryId" name="history_id">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editHistoryYear" class="form-label">السنة</label>
+                                <input type="number" class="form-control" id="editHistoryYear" name="year" min="1950" max="2030" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editHistoryPosition" class="form-label">المنصب</label>
+                                <input type="text" class="form-control" id="editHistoryPosition" name="position" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editHistoryOrganization" class="form-label">الجهة/المؤسسة</label>
+                            <input type="text" class="form-control" id="editHistoryOrganization" name="organization" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editHistoryDescription" class="form-label">وصف المهام والإنجازات</label>
+                            <textarea class="form-control" id="editHistoryDescription" name="description" rows="4" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                        <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function editHistory(id, year, position, organization, description) {
+            document.getElementById('editHistoryId').value = id;
+            document.getElementById('editHistoryYear').value = year;
+            document.getElementById('editHistoryPosition').value = position;
+            document.getElementById('editHistoryOrganization').value = organization;
+            document.getElementById('editHistoryDescription').value = description;
+            
+            const editModal = new bootstrap.Modal(document.getElementById('editHistoryModal'));
+            editModal.show();
+        }
+        
+        function deleteHistory(id) {
+            if (confirm('هل أنت متأكد من حذف هذا المنصب من تاريخك؟')) {
+                // Create a form to submit the delete request
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '{% url "core:delete_service_history" %}';
+                
+                const csrfToken = document.createElement('input');
+                csrfToken.type = 'hidden';
+                csrfToken.name = 'csrfmiddlewaretoken';
+                csrfToken.value = '{{ csrf_token }}';
+                
+                const historyId = document.createElement('input');
+                historyId.type = 'hidden';
+                historyId.name = 'history_id';
+                historyId.value = id;
+                
+                form.appendChild(csrfToken);
+                form.appendChild(historyId);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
+</body>
+</html>
+

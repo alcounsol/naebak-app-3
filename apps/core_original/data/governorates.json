@@ -1,0 +1,275 @@
+{
+  "governorates": [
+    {
+      "id": 1,
+      "name_ar": "القاهرة",
+      "name_en": "Cairo",
+      "slug": "cairo",
+      "description": "العاصمة الإدارية والسياسية لجمهورية مصر العربية",
+      "region": "القاهرة الكبرى",
+      "population": 10000000,
+      "area": 606
+    },
+    {
+      "id": 2,
+      "name_ar": "الجيزة",
+      "name_en": "Giza",
+      "slug": "giza",
+      "description": "موطن أهرامات الجيزة وأبو الهول",
+      "region": "القاهرة الكبرى",
+      "population": 8800000,
+      "area": 13184
+    },
+    {
+      "id": 3,
+      "name_ar": "الإسكندرية",
+      "name_en": "Alexandria",
+      "slug": "alexandria",
+      "description": "عروس البحر الأبيض المتوسط والعاصمة الثانية لمصر",
+      "region": "الإسكندرية",
+      "population": 5200000,
+      "area": 2679
+    },
+    {
+      "id": 4,
+      "name_ar": "البحيرة",
+      "name_en": "Beheira",
+      "slug": "beheira",
+      "description": "محافظة زراعية في شمال الدلتا",
+      "region": "الدلتا",
+      "population": 6200000,
+      "area": 10130
+    },
+    {
+      "id": 5,
+      "name_ar": "كفر الشيخ",
+      "name_en": "Kafr El Sheikh",
+      "slug": "kafr-el-sheikh",
+      "description": "محافظة زراعية تقع في شمال الدلتا",
+      "region": "الدلتا",
+      "population": 3400000,
+      "area": 3748
+    },
+    {
+      "id": 6,
+      "name_ar": "الدقهلية",
+      "name_en": "Dakahlia",
+      "slug": "dakahlia",
+      "description": "محافظة في وسط الدلتا وعاصمتها المنصورة",
+      "region": "الدلتا",
+      "population": 6500000,
+      "area": 3459
+    },
+    {
+      "id": 7,
+      "name_ar": "دمياط",
+      "name_en": "Damietta",
+      "slug": "damietta",
+      "description": "مدينة ساحلية على البحر المتوسط مشهورة بصناعة الأثاث",
+      "region": "الدلتا",
+      "population": 1500000,
+      "area": 910
+    },
+    {
+      "id": 8,
+      "name_ar": "الشرقية",
+      "name_en": "Sharqia",
+      "slug": "sharqia",
+      "description": "محافظة في شرق الدلتا وعاصمتها الزقازيق",
+      "region": "الدلتا",
+      "population": 7100000,
+      "area": 4180
+    },
+    {
+      "id": 9,
+      "name_ar": "الغربية",
+      "name_en": "Gharbia",
+      "slug": "gharbia",
+      "description": "محافظة في وسط الدلتا وعاصمتها طنطا",
+      "region": "الدلتا",
+      "population": 4900000,
+      "area": 1942
+    },
+    {
+      "id": 10,
+      "name_ar": "المنوفية",
+      "name_en": "Monufia",
+      "slug": "monufia",
+      "description": "محافظة في جنوب الدلتا وعاصمتها شبين الكوم",
+      "region": "الدلتا",
+      "population": 4200000,
+      "area": 1532
+    },
+    {
+      "id": 11,
+      "name_ar": "القليوبية",
+      "name_en": "Qalyubia",
+      "slug": "qalyubia",
+      "description": "محافظة في جنوب الدلتا وعاصمتها بنها",
+      "region": "الدلتا",
+      "population": 5600000,
+      "area": 1001
+    },
+    {
+      "id": 12,
+      "name_ar": "بورسعيد",
+      "name_en": "Port Said",
+      "slug": "port-said",
+      "description": "مدينة ساحلية على البحر المتوسط ومدخل قناة السويس",
+      "region": "قناة السويس",
+      "population": 750000,
+      "area": 1345
+    },
+    {
+      "id": 13,
+      "name_ar": "الإسماعيلية",
+      "name_en": "Ismailia",
+      "slug": "ismailia",
+      "description": "محافظة على قناة السويس ومركز إدارة القناة",
+      "region": "قناة السويس",
+      "population": 1300000,
+      "area": 1442
+    },
+    {
+      "id": 14,
+      "name_ar": "السويس",
+      "name_en": "Suez",
+      "slug": "suez",
+      "description": "مدينة ساحلية على البحر الأحمر ونهاية قناة السويس الجنوبية",
+      "region": "قناة السويس",
+      "population": 750000,
+      "area": 9002
+    },
+    {
+      "id": 15,
+      "name_ar": "شمال سيناء",
+      "name_en": "North Sinai",
+      "slug": "north-sinai",
+      "description": "محافظة في شمال شبه جزيرة سيناء وعاصمتها العريش",
+      "region": "سيناء",
+      "population": 450000,
+      "area": 27564
+    },
+    {
+      "id": 16,
+      "name_ar": "جنوب سيناء",
+      "name_en": "South Sinai",
+      "slug": "south-sinai",
+      "description": "محافظة في جنوب شبه جزيرة سيناء وعاصمتها الطور",
+      "region": "سيناء",
+      "population": 180000,
+      "area": 31272
+    },
+    {
+      "id": 17,
+      "name_ar": "بني سويف",
+      "name_en": "Beni Suef",
+      "slug": "beni-suef",
+      "description": "محافظة في صعيد مصر وعاصمتها بني سويف",
+      "region": "الصعيد",
+      "population": 3200000,
+      "area": 1322
+    },
+    {
+      "id": 18,
+      "name_ar": "الفيوم",
+      "name_en": "Fayoum",
+      "slug": "fayoum",
+      "description": "محافظة في صعيد مصر مشهورة بالواحات والآثار",
+      "region": "الصعيد",
+      "population": 3600000,
+      "area": 1827
+    },
+    {
+      "id": 19,
+      "name_ar": "المنيا",
+      "name_en": "Minya",
+      "slug": "minya",
+      "description": "محافظة في صعيد مصر وعاصمتها المنيا",
+      "region": "الصعيد",
+      "population": 5500000,
+      "area": 2262
+    },
+    {
+      "id": 20,
+      "name_ar": "أسيوط",
+      "name_en": "Assiut",
+      "slug": "assiut",
+      "description": "محافظة في صعيد مصر وعاصمتها أسيوط",
+      "region": "الصعيد",
+      "population": 4400000,
+      "area": 1553
+    },
+    {
+      "id": 21,
+      "name_ar": "سوهاج",
+      "name_en": "Sohag",
+      "slug": "sohag",
+      "description": "محافظة في صعيد مصر وعاصمتها سوهاج",
+      "region": "الصعيد",
+      "population": 4900000,
+      "area": 1547
+    },
+    {
+      "id": 22,
+      "name_ar": "قنا",
+      "name_en": "Qena",
+      "slug": "qena",
+      "description": "محافظة في صعيد مصر وعاصمتها قنا",
+      "region": "الصعيد",
+      "population": 3200000,
+      "area": 1796
+    },
+    {
+      "id": 23,
+      "name_ar": "الأقصر",
+      "name_en": "Luxor",
+      "slug": "luxor",
+      "description": "محافظة أثرية في صعيد مصر ومتحف مفتوح للحضارة الفرعونية",
+      "region": "الصعيد",
+      "population": 1250000,
+      "area": 416
+    },
+    {
+      "id": 24,
+      "name_ar": "أسوان",
+      "name_en": "Aswan",
+      "slug": "aswan",
+      "description": "محافظة في أقصى جنوب مصر ومشهورة بالسد العالي",
+      "region": "الصعيد",
+      "population": 1500000,
+      "area": 679
+    },
+    {
+      "id": 25,
+      "name_ar": "البحر الأحمر",
+      "name_en": "Red Sea",
+      "slug": "red-sea",
+      "description": "محافظة ساحلية على البحر الأحمر وعاصمتها الغردقة",
+      "region": "الصحراء الشرقية",
+      "population": 400000,
+      "area": 203685
+    },
+    {
+      "id": 26,
+      "name_ar": "مطروح",
+      "name_en": "Matrouh",
+      "slug": "matrouh",
+      "description": "محافظة ساحلية على البحر المتوسط في الصحراء الغربية",
+      "region": "الصحراء الغربية",
+      "population": 450000,
+      "area": 212112
+    },
+    {
+      "id": 27,
+      "name_ar": "الوادي الجديد",
+      "name_en": "New Valley",
+      "slug": "new-valley",
+      "description": "أكبر محافظات مصر مساحة وتقع في الصحراء الغربية",
+      "region": "الصحراء الغربية",
+      "population": 250000,
+      "area": 376505
+    }
+  ]
+}
+

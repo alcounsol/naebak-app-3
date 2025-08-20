@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}نائبك دوت كوم - منصة تفاعلية للتواصل مع المرشحين والمواطنين{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}نائبك، مرشحين، انتخابات، مصر، محافظات{% endblock %}">
+    <meta name="author" content="نائبك دوت كوم">
+    
+    <title>{% block title %}نائبك دوت كوم{% endblock %}</title>
+    
+    <!-- Bootstrap 5 RTL CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Tajawal Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="{% load static %}{% static 'naebak/css/news-ticker.css' %}" rel="stylesheet">
+    <link href="{% load static %}{% static 'naebak/css/style.css' %}" rel="stylesheet">
+    
+    {% block extra_css %}{% endblock %}
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{% load static %}{% static 'naebak/images/logo-naebak-green.png' %}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container">
+            <!-- Logo -->
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'core:home' %}">
+                <img src="{% load static %}{% static 'naebak/images/logo-naebak-white.png' %}" alt="نائبك دوت كوم" height="40">
+            </a>
+            
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Navigation Links -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'core:home' %}">
+                            <i class="fas fa-home me-1"></i>الرئيسية
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'core:governorates' %}">
+                            <i class="fas fa-map-marked-alt me-1"></i>المحافظات
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'candidates:candidate_list' %}">
+                            <i class="fas fa-users me-1"></i>المرشحون
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- User Menu -->
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                        <!-- Notification Bell -->
+                        <li class="nav-item dropdown me-3">
+                            <a class="nav-link position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-bell fs-5"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-count" style="display: none;">
+                                    0
+                                </span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end notification-dropdown" aria-labelledby="notificationDropdown">
+                                <div class="dropdown-header d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0">الإشعارات</h6>
+                                    <button class="btn btn-sm btn-link text-muted mark-all-read" style="display: none;">
+                                        <small>تحديد الكل كمقروء</small>
+                                    </button>
+                                </div>
+                                <div class="notification-list">
+                                    <div class="dropdown-item-text text-center text-muted py-3">
+                                        <i class="fas fa-bell-slash mb-2"></i>
+                                        <div>لا توجد إشعارات جديدة</div>
+                                    </div>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-center small" href="{% url 'messaging:message_inbox' %}">
+                                    عرض جميع الرسائل
+                                </a>
+                            </div>
+                        </li>
+                        
+                        <!-- User Profile Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle me-1"></i>{{ user.get_full_name|default:user.username }}
+                            </a>
+                            <ul class="dropdown-menu">
+                                {% if user.is_authenticated %}
+                                    {% if user.candidate_profile %}
+                                        <li><a class="dropdown-item" href="{% url 'core:candidate_dashboard' %}">
+                                            <i class="fas fa-tachometer-alt me-2"></i>لوحة تحكم المرشح
+                                        </a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                    {% endif %}
+                                {% endif %}
+                                <li><a class="dropdown-item" href="{% url 'accounts:citizen_profile' %}">
+                                    <i class="fas fa-user me-2"></i>الملف الشخصي
+                                </a></li>
+                                <li><a class="dropdown-item" href="{% url 'messaging:message_inbox' %}">
+                                    <i class="fas fa-comments me-2"></i>المحادثات
+                                </a></li>
+                                {% if user.is_staff %}
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{% url 'core:admin_panel' %}">
+                                        <i class="fas fa-cog me-2"></i>لوحة الإدارة
+                                    </a></li>
+                                {% endif %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">
+                                    <i class="fas fa-sign-out-alt me-2"></i>تسجيل الخروج
+                                </a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'accounts:login' %}">
+                                <i class="fas fa-sign-in-alt me-1"></i>تسجيل الدخول
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'accounts:citizen_register' %}">
+                                <i class="fas fa-user-plus me-1"></i>إنشاء حساب
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Breadcrumbs -->
+        
+        
+        <!-- Modern Flash Notifications -->
+        {% if messages %}
+            <div class="flash-notifications-container">
+                {% for message in messages %}
+                    <div class="flash-notification flash-{{ message.tags }}" data-notification>
+                        <div class="flash-icon">
+                            {% if message.tags == 'success' %}
+                                <i class="fas fa-check-circle"></i>
+                            {% elif message.tags == 'error' %}
+                                <i class="fas fa-exclamation-circle"></i>
+                            {% elif message.tags == 'warning' %}
+                                <i class="fas fa-exclamation-triangle"></i>
+                            {% elif message.tags == 'info' %}
+                                <i class="fas fa-info-circle"></i>
+                            {% else %}
+                                <i class="fas fa-bell"></i>
+                            {% endif %}
+                        </div>
+                        <div class="flash-content">
+                            <div class="flash-message">{{ message }}</div>
+                        </div>
+                        <button type="button" class="flash-close" data-dismiss-notification>
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <div class="flash-progress"></div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-3 mt-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-3">
+                    <div class="d-flex align-items-center">
+                        <img src="{% load static %}{% static 'naebak/images/logo-naebak-white.png' %}" alt="نائبك دوت كوم" height="25" class="me-2">
+                        <span class="small">نائبك دوت كوم</span>
+                    </div>
+                </div>
+                <div class="col-md-6 text-center">
+                    <div class="d-flex justify-content-center gap-4 mb-2">
+                        <a href="{% url 'core:home' %}" class="text-white text-decoration-none small">الرئيسية</a>
+                        <a href="{% url 'core:governorates' %}" class="text-white text-decoration-none small">المحافظات</a>
+                        <a href="{% url 'candidates:candidate_list' %}" class="text-white text-decoration-none small">المرشحون</a>
+                    </div>
+                    <div class="d-flex justify-content-center gap-3 mb-2">
+                        <a href="{% url 'core:privacy_policy' %}" class="text-white-50 text-decoration-none small">سياسة الخصوصية</a>
+                        <a href="{% url 'core:terms_of_service' %}" class="text-white-50 text-decoration-none small">شروط الاستخدام</a>
+                    </div>
+                    <div class="small text-white">
+                        جميع حقوق الطبع محفوظة 2025
+                    </div>
+                </div>
+                <div class="col-md-3 text-start">
+                    <div class="d-flex justify-content-start gap-3">
+                        <a href="https://www.youtube.com/channel/yourchannel" class="text-muted" target="_blank"><i class="fab fa-youtube fa-lg"></i></a>
+                        <a href="https://www.facebook.com/yourpage" class="text-muted" target="_blank"><i class="fab fa-facebook-f fa-lg"></i></a>
+                        <a href="https://www.instagram.com/yourprofile" class="text-muted" target="_blank"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="mailto:info@naebak.com" class="text-muted"><i class="fas fa-envelope fa-lg"></i></a>
+                        <a href="https://wa.me/yourphonenumber" class="text-muted" target="_blank"><i class="fab fa-whatsapp fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="{% load static %}{% static 'naebak/js/main.js' %}"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

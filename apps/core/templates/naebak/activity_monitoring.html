@@ -1,0 +1,589 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }} - نائبك دوت كوم{% endblock %}
+
+{% block extra_css %}
+<style>
+    .stats-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        border-right: 5px solid var(--primary-color);
+        transition: transform 0.3s ease;
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .stats-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: var(--primary-color);
+        margin-bottom: 10px;
+    }
+    
+    .stats-label {
+        color: #666;
+        font-size: 1rem;
+        margin-bottom: 5px;
+    }
+    
+    .activity-item {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        border-right: 4px solid var(--primary-color);
+        transition: transform 0.2s ease;
+    }
+    
+    .activity-item:hover {
+        transform: translateX(-5px);
+    }
+    
+    .activity-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    
+    .activity-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+        margin-left: 15px;
+    }
+    
+    .activity-content {
+        flex: 1;
+    }
+    
+    .activity-title {
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 5px;
+    }
+    
+    .activity-description {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 5px;
+    }
+    
+    .activity-meta {
+        color: #999;
+        font-size: 0.8rem;
+        display: flex;
+        gap: 15px;
+    }
+    
+    .severity-info {
+        background: #17a2b8;
+    }
+    
+    .severity-warning {
+        background: #ffc107;
+        color: #333 !important;
+    }
+    
+    .severity-error {
+        background: #dc3545;
+    }
+    
+    .severity-critical {
+        background: #6f42c1;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.7; }
+        100% { opacity: 1; }
+    }
+    
+    .severity-badge {
+        padding: 3px 8px;
+        border-radius: 15px;
+        font-size: 0.7rem;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    
+    .severity-info-badge {
+        background: #d1ecf1;
+        color: #0c5460;
+    }
+    
+    .severity-warning-badge {
+        background: #fff3cd;
+        color: #856404;
+    }
+    
+    .severity-error-badge {
+        background: #f8d7da;
+        color: #721c24;
+    }
+    
+    .severity-critical-badge {
+        background: #e2d9f3;
+        color: #4a2c7a;
+    }
+    
+    .filters-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .security-alert {
+        background: #fff5f5;
+        border: 1px solid #fed7d7;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .security-alert.critical {
+        background: #f7fafc;
+        border-color: #e2e8f0;
+        animation: glow 3s infinite;
+    }
+    
+    @keyframes glow {
+        0% { box-shadow: 0 0 5px rgba(220, 53, 69, 0.3); }
+        50% { box-shadow: 0 0 20px rgba(220, 53, 69, 0.6); }
+        100% { box-shadow: 0 0 5px rgba(220, 53, 69, 0.3); }
+    }
+    
+    .chart-container {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        height: 400px;
+    }
+    
+    .pagination {
+        justify-content: center;
+        margin-top: 30px;
+    }
+    
+    .pagination .page-link {
+        color: var(--primary-color);
+        border: 1px solid #dee2e6;
+        padding: 10px 15px;
+    }
+    
+    .pagination .page-link:hover {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        color: white;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #666;
+    }
+    
+    .empty-state i {
+        font-size: 4rem;
+        color: #ddd;
+        margin-bottom: 20px;
+    }
+    
+    .refresh-btn {
+        position: fixed;
+        bottom: 30px;
+        left: 30px;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+    
+    .refresh-btn:hover {
+        background: var(--primary-dark);
+        transform: scale(1.1);
+    }
+    
+    .activity-breakdown {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+    }
+    
+    .breakdown-item {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+    }
+    
+    .breakdown-count {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--primary-color);
+    }
+    
+    .breakdown-label {
+        font-size: 0.9rem;
+        color: #666;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>
+                    <i class="fas fa-chart-line me-2"></i>
+                    مراقبة النشاط
+                </h2>
+                <div>
+                    <button class="btn btn-outline-primary" onclick="refreshData()">
+                        <i class="fas fa-sync-alt me-2"></i>
+                        تحديث البيانات
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stats-card text-center">
+                <div class="stats-number">{{ stats.total_activities }}</div>
+                <div class="stats-label">إجمالي الأنشطة</div>
+                <div class="text-muted small">آخر 30 يوم</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card text-center">
+                <div class="stats-number">{{ stats.unique_users }}</div>
+                <div class="stats-label">المستخدمون النشطون</div>
+                <div class="text-muted small">آخر 30 يوم</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card text-center">
+                <div class="stats-number">{{ stats.login_count }}</div>
+                <div class="stats-label">عمليات تسجيل الدخول</div>
+                <div class="text-muted small">آخر 30 يوم</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card text-center">
+                <div class="stats-number">{{ stats.error_count }}</div>
+                <div class="stats-label">الأخطاء والتحذيرات</div>
+                <div class="text-muted small">آخر 30 يوم</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Filters -->
+            <div class="filters-card">
+                <h5 class="mb-3">
+                    <i class="fas fa-filter me-2"></i>
+                    تصفية الأنشطة
+                </h5>
+                <form method="GET" class="row g-3">
+                    <div class="col-md-3">
+                        <label for="action" class="form-label">نوع النشاط</label>
+                        <select class="form-select" id="action" name="action">
+                            <option value="">جميع الأنشطة</option>
+                            {% for value, label in action_choices %}
+                            <option value="{{ value }}" {% if filters.action == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="severity" class="form-label">مستوى الأهمية</label>
+                        <select class="form-select" id="severity" name="severity">
+                            <option value="">جميع المستويات</option>
+                            {% for value, label in severity_choices %}
+                            <option value="{{ value }}" {% if filters.severity == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="user" class="form-label">المستخدم</label>
+                        <select class="form-select" id="user" name="user">
+                            <option value="">جميع المستخدمين</option>
+                            {% for user in active_users %}
+                            <option value="{{ user.id }}" {% if filters.user == user.id|stringformat:"s" %}selected{% endif %}>
+                                {{ user.get_full_name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="search" class="form-label">البحث</label>
+                        <input type="text" class="form-control" id="search" name="search" 
+                               value="{{ filters.search }}" placeholder="البحث في الوصف...">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="date_from" class="form-label">من تاريخ</label>
+                        <input type="date" class="form-control" id="date_from" name="date_from" 
+                               value="{{ filters.date_from }}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="date_to" class="form-label">إلى تاريخ</label>
+                        <input type="date" class="form-control" id="date_to" name="date_to" 
+                               value="{{ filters.date_to }}">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">&nbsp;</label>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search me-2"></i>
+                                تطبيق التصفية
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Activities List -->
+            {% if activities_page %}
+                {% for activity in activities_page %}
+                <div class="activity-item">
+                    <div class="activity-header">
+                        <div class="d-flex align-items-center">
+                            <div class="activity-icon severity-{{ activity.severity }}">
+                                <i class="{{ activity.get_action_icon }}"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">
+                                    {{ activity.get_action_type_display }}
+                                    <span class="severity-badge severity-{{ activity.severity }}-badge">
+                                        {{ activity.get_severity_display }}
+                                    </span>
+                                </div>
+                                <div class="activity-description">
+                                    {{ activity.description }}
+                                </div>
+                                <div class="activity-meta">
+                                    {% if activity.user %}
+                                    <span>
+                                        <i class="fas fa-user me-1"></i>
+                                        {{ activity.user.get_full_name }}
+                                    </span>
+                                    {% endif %}
+                                    <span>
+                                        <i class="fas fa-clock me-1"></i>
+                                        {{ activity.timestamp|date:"d/m/Y H:i:s" }}
+                                    </span>
+                                    {% if activity.ip_address %}
+                                    <span>
+                                        <i class="fas fa-map-marker-alt me-1"></i>
+                                        {{ activity.ip_address }}
+                                    </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <a href="{% url 'naebak:activity_detail' activity.id %}" 
+                               class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye me-1"></i>
+                                تفاصيل
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                
+                <!-- Pagination -->
+                {% if activities_page.has_other_pages %}
+                <nav aria-label="تصفح الأنشطة">
+                    <ul class="pagination">
+                        {% if activities_page.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1{% for key, value in filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}">الأولى</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ activities_page.previous_page_number }}{% for key, value in filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}">السابقة</a>
+                        </li>
+                        {% endif %}
+                        
+                        {% for num in activities_page.paginator.page_range %}
+                        {% if activities_page.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                        {% elif num > activities_page.number|add:'-3' and num < activities_page.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}{% for key, value in filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        {% if activities_page.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ activities_page.next_page_number }}{% for key, value in filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}">التالية</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ activities_page.paginator.num_pages }}{% for key, value in filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}">الأخيرة</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-chart-line"></i>
+                    <h4>لا توجد أنشطة</h4>
+                    <p>لم يتم العثور على أنشطة تطابق المعايير المحددة</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Security Alerts -->
+            {% if security_alerts %}
+            <div class="card mb-4">
+                <div class="card-header bg-danger text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-shield-alt me-2"></i>
+                        التنبيهات الأمنية (آخر 7 أيام)
+                    </h6>
+                </div>
+                <div class="card-body p-0">
+                    {% for alert in security_alerts %}
+                    <div class="security-alert {% if alert.severity == 'critical' %}critical{% endif %}">
+                        <div class="d-flex align-items-center">
+                            <div class="activity-icon severity-{{ alert.severity }} me-3" style="width: 30px; height: 30px; font-size: 0.9rem;">
+                                <i class="{{ alert.get_action_icon }}"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="fw-bold">{{ alert.get_action_type_display }}</div>
+                                <div class="small text-muted">{{ alert.timestamp|date:"d/m H:i" }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Activity Breakdown -->
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-chart-pie me-2"></i>
+                        توزيع الأنشطة (آخر 30 يوم)
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="activity-breakdown">
+                        {% for item in stats.activity_breakdown %}
+                        <div class="breakdown-item">
+                            <div class="breakdown-count">{{ item.count }}</div>
+                            <div class="breakdown-label">
+                                {% for action_type, action_label in action_choices %}
+                                    {% if action_type == item.action_type %}
+                                        {{ action_label }}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Back to Admin Panel -->
+    <div class="text-center mt-4">
+        <a href="{% url 'naebak:admin_panel' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-right me-2"></i>
+            العودة للوحة الإدارة
+        </a>
+    </div>
+</div>
+
+<!-- Refresh Button -->
+<button class="refresh-btn" onclick="refreshData()" title="تحديث البيانات">
+    <i class="fas fa-sync-alt"></i>
+</button>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function refreshData() {
+    location.reload();
+}
+
+// Auto-refresh every 60 seconds for critical alerts
+setInterval(function() {
+    if (document.querySelector('.security-alert.critical')) {
+        refreshData();
+    }
+}, 60000);
+
+// Real-time updates for activity stats
+function updateStats() {
+    fetch('/api/activity-stats/?days=7')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update stats if needed
+                console.log('Stats updated:', data.stats);
+            }
+        })
+        .catch(error => console.error('Error updating stats:', error));
+}
+
+// Update stats every 5 minutes
+setInterval(updateStats, 300000);
+
+// Highlight new activities (if any)
+document.addEventListener('DOMContentLoaded', function() {
+    const activities = document.querySelectorAll('.activity-item');
+    activities.forEach((activity, index) => {
+        if (index < 3) { // Highlight first 3 activities as "recent"
+            activity.style.borderRight = '4px solid #28a745';
+        }
+    });
+});
+</script>
+{% endblock %}
+

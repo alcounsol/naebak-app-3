@@ -1,0 +1,511 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }} - نائبك دوت كوم{% endblock %}
+
+{% block extra_css %}
+<style>
+    .stats-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        border-right: 5px solid var(--primary-color);
+        transition: transform 0.3s ease;
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .stats-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: var(--primary-color);
+        margin-bottom: 10px;
+    }
+    
+    .stats-label {
+        color: #666;
+        font-size: 1rem;
+        margin-bottom: 5px;
+    }
+    
+    .stats-detail {
+        color: #999;
+        font-size: 0.9rem;
+    }
+    
+    .rating-stars {
+        color: #ffc107;
+        font-size: 1.2rem;
+    }
+    
+    .vote-approve {
+        color: #28a745;
+        font-weight: bold;
+    }
+    
+    .vote-disapprove {
+        color: #dc3545;
+        font-weight: bold;
+    }
+    
+    .rating-item, .vote-item {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        border-right: 4px solid var(--primary-color);
+    }
+    
+    .rating-header, .vote-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+    }
+    
+    .timestamp {
+        color: #999;
+        font-size: 0.9rem;
+    }
+    
+    .rating-comment {
+        margin-top: 10px;
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 5px;
+        font-style: italic;
+    }
+    
+    .progress-bar {
+        background: #e9ecef;
+        border-radius: 10px;
+        height: 20px;
+        overflow: hidden;
+        margin-bottom: 10px;
+    }
+    
+    .progress-fill {
+        background: var(--primary-color);
+        height: 100%;
+        transition: width 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+    
+    .rating-distribution {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+    
+    .distribution-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    
+    .star-label {
+        width: 60px;
+        font-weight: bold;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #666;
+    }
+    
+    .empty-state i {
+        font-size: 4rem;
+        color: #ddd;
+        margin-bottom: 20px;
+    }
+    
+    .tabs-container {
+        margin-bottom: 30px;
+    }
+    
+    .nav-tabs {
+        border-bottom: 2px solid #e9ecef;
+    }
+    
+    .nav-tabs .nav-link {
+        border: none;
+        color: #666;
+        font-weight: bold;
+        padding: 15px 25px;
+        border-radius: 0;
+        position: relative;
+    }
+    
+    .nav-tabs .nav-link.active {
+        color: var(--primary-color);
+        background: none;
+        border: none;
+    }
+    
+    .nav-tabs .nav-link.active::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--primary-color);
+    }
+    
+    .pagination {
+        justify-content: center;
+        margin-top: 30px;
+    }
+    
+    .pagination .page-link {
+        color: var(--primary-color);
+        border: 1px solid #dee2e6;
+        padding: 10px 15px;
+    }
+    
+    .pagination .page-link:hover {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        color: white;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center mb-4">
+                <i class="fas fa-chart-bar me-2"></i>
+                التقييمات والتصويتات
+            </h2>
+        </div>
+    </div>
+    
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stats-card text-center">
+                <div class="stats-number">{{ total_ratings }}</div>
+                <div class="stats-label">إجمالي التقييمات</div>
+                <div class="stats-detail">من المواطنين</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card text-center">
+                <div class="stats-number">{{ avg_rating }}</div>
+                <div class="stats-label">متوسط التقييم</div>
+                <div class="stats-detail">
+                    <span class="rating-stars">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= avg_rating %}
+                                <i class="fas fa-star"></i>
+                            {% else %}
+                                <i class="far fa-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card text-center">
+                <div class="stats-number">{{ total_votes }}</div>
+                <div class="stats-label">إجمالي التصويتات</div>
+                <div class="stats-detail">تأييد ومعارضة</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card text-center">
+                <div class="stats-number">
+                    {% if total_votes > 0 %}
+                        {{ approve_votes|floatformat:0 }}%
+                    {% else %}
+                        0%
+                    {% endif %}
+                </div>
+                <div class="stats-label">نسبة التأييد</div>
+                <div class="stats-detail">
+                    <span class="vote-approve">{{ approve_votes }} تأييد</span> | 
+                    <span class="vote-disapprove">{{ disapprove_votes }} معارضة</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Rating Distribution -->
+    {% if total_ratings > 0 %}
+    <div class="rating-distribution">
+        <h4 class="mb-3">
+            <i class="fas fa-chart-pie me-2"></i>
+            توزيع التقييمات
+        </h4>
+        {% for stars, count in rating_distribution.items %}
+        <div class="distribution-item">
+            <div class="star-label">
+                {{ stars }} <i class="fas fa-star text-warning"></i>
+            </div>
+            <div class="flex-grow-1 mx-3">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {% if total_ratings > 0 %}{{ count|floatformat:0 }}{% else %}0{% endif %}%">
+                        {{ count }}
+                    </div>
+                </div>
+            </div>
+            <div class="text-muted">
+                {% if total_ratings > 0 %}
+                    {{ count|floatformat:0 }}%
+                {% else %}
+                    0%
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- Tabs -->
+    <div class="tabs-container">
+        <ul class="nav nav-tabs" id="ratingsTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="ratings-tab" data-bs-toggle="tab" data-bs-target="#ratings" type="button" role="tab">
+                    <i class="fas fa-star me-2"></i>
+                    التقييمات ({{ total_ratings }})
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="votes-tab" data-bs-toggle="tab" data-bs-target="#votes" type="button" role="tab">
+                    <i class="fas fa-thumbs-up me-2"></i>
+                    التصويتات ({{ total_votes }})
+                </button>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- Tab Content -->
+    <div class="tab-content" id="ratingsTabsContent">
+        <!-- Ratings Tab -->
+        <div class="tab-pane fade show active" id="ratings" role="tabpanel">
+            {% if ratings %}
+                {% for rating in ratings %}
+                <div class="rating-item">
+                    <div class="rating-header">
+                        <div class="user-info">
+                            <div class="user-avatar">
+                                {{ rating.citizen.user.first_name|first|upper }}
+                            </div>
+                            <div>
+                                <strong>{{ rating.citizen.user.get_full_name }}</strong>
+                                <div class="rating-stars">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= rating.stars %}
+                                            <i class="fas fa-star"></i>
+                                        {% else %}
+                                            <i class="far fa-star"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timestamp">
+                            {{ rating.timestamp|date:"d/m/Y H:i" }}
+                        </div>
+                    </div>
+                    {% if rating.comment %}
+                    <div class="rating-comment">
+                        "{{ rating.comment }}"
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                
+                <!-- Ratings Pagination -->
+                {% if ratings.has_other_pages %}
+                <nav aria-label="تصفح التقييمات">
+                    <ul class="pagination">
+                        {% if ratings.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?ratings_page=1{% if request.GET.votes_page %}&votes_page={{ request.GET.votes_page }}{% endif %}">الأولى</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?ratings_page={{ ratings.previous_page_number }}{% if request.GET.votes_page %}&votes_page={{ request.GET.votes_page }}{% endif %}">السابقة</a>
+                        </li>
+                        {% endif %}
+                        
+                        {% for num in ratings.paginator.page_range %}
+                        {% if ratings.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                        {% elif num > ratings.number|add:'-3' and num < ratings.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?ratings_page={{ num }}{% if request.GET.votes_page %}&votes_page={{ request.GET.votes_page }}{% endif %}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        {% if ratings.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?ratings_page={{ ratings.next_page_number }}{% if request.GET.votes_page %}&votes_page={{ request.GET.votes_page }}{% endif %}">التالية</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?ratings_page={{ ratings.paginator.num_pages }}{% if request.GET.votes_page %}&votes_page={{ request.GET.votes_page }}{% endif %}">الأخيرة</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-star"></i>
+                    <h4>لا توجد تقييمات حتى الآن</h4>
+                    <p>عندما يقوم المواطنون بتقييمك، ستظهر التقييمات هنا</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Votes Tab -->
+        <div class="tab-pane fade" id="votes" role="tabpanel">
+            {% if votes %}
+                {% for vote in votes %}
+                <div class="vote-item">
+                    <div class="vote-header">
+                        <div class="user-info">
+                            <div class="user-avatar">
+                                {{ vote.citizen.user.first_name|first|upper }}
+                            </div>
+                            <div>
+                                <strong>{{ vote.citizen.user.get_full_name }}</strong>
+                                <div>
+                                    {% if vote.vote_type == 'approve' %}
+                                        <span class="vote-approve">
+                                            <i class="fas fa-thumbs-up me-1"></i>
+                                            يؤيد
+                                        </span>
+                                    {% else %}
+                                        <span class="vote-disapprove">
+                                            <i class="fas fa-thumbs-down me-1"></i>
+                                            يعارض
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timestamp">
+                            {{ vote.timestamp|date:"d/m/Y H:i" }}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                
+                <!-- Votes Pagination -->
+                {% if votes.has_other_pages %}
+                <nav aria-label="تصفح التصويتات">
+                    <ul class="pagination">
+                        {% if votes.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?votes_page=1{% if request.GET.ratings_page %}&ratings_page={{ request.GET.ratings_page }}{% endif %}">الأولى</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?votes_page={{ votes.previous_page_number }}{% if request.GET.ratings_page %}&ratings_page={{ request.GET.ratings_page }}{% endif %}">السابقة</a>
+                        </li>
+                        {% endif %}
+                        
+                        {% for num in votes.paginator.page_range %}
+                        {% if votes.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                        {% elif num > votes.number|add:'-3' and num < votes.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?votes_page={{ num }}{% if request.GET.ratings_page %}&ratings_page={{ request.GET.ratings_page }}{% endif %}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        {% if votes.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?votes_page={{ votes.next_page_number }}{% if request.GET.ratings_page %}&ratings_page={{ request.GET.ratings_page }}{% endif %}">التالية</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?votes_page={{ votes.paginator.num_pages }}{% if request.GET.ratings_page %}&ratings_page={{ request.GET.ratings_page }}{% endif %}">الأخيرة</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-vote-yea"></i>
+                    <h4>لا توجد تصويتات حتى الآن</h4>
+                    <p>عندما يقوم المواطنون بالتصويت لك أو ضدك، ستظهر التصويتات هنا</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Back to Dashboard -->
+    <div class="text-center mt-4">
+        <a href="{% url 'core:candidate_dashboard' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-right me-2"></i>
+            العودة للوحة التحكم
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-refresh every 30 seconds
+    setTimeout(function() {
+        location.reload();
+    }, 30000);
+    
+    // Smooth tab transitions
+    const tabTriggers = document.querySelectorAll('[data-bs-toggle="tab"]');
+    tabTriggers.forEach(trigger => {
+        trigger.addEventListener('shown.bs.tab', function(event) {
+            // Add any custom tab switching logic here
+        });
+    });
+});
+</script>
+{% endblock %}
+

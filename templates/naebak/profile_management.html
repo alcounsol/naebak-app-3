@@ -1,0 +1,237 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الملف الشخصي - نائبك دوت كوم</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Tajawal', sans-serif;
+            direction: rtl;
+            text-align: right;
+        }
+        
+        .sidebar {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 250px;
+            z-index: 1000;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar .logo {
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .sidebar .logo img {
+            max-width: 150px;
+            height: auto;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.9);
+            padding: 1rem 1.5rem;
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateX(-5px);
+        }
+        
+        .main-content {
+            margin-right: 250px;
+            padding: 2rem;
+        }
+        
+        .page-header {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .page-header h1 {
+            color: #4CAF50;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .content-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .profile-picture-upload,
+        .banner-upload {
+            border: 2px dashed #e9ecef;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .profile-picture-upload:hover,
+        .banner-upload:hover {
+            border-color: #4CAF50;
+            background-color: #e8f5e8;
+        }
+        
+        .profile-picture-upload img,
+        .banner-upload img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            border: none;
+            border-radius: 30px;
+            padding: 0.75rem 2rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="{% static 'naebak/images/logo-naebak-white.png' %}" alt="نائبك دوت كوم">
+        </div>
+        <nav class="nav flex-column">
+            <a class="nav-link" href="{% url "candidates:candidate_dashboard" %}">
+                <i class="fas fa-tachometer-alt me-2"></i>لوحة التحكم
+            </a>
+            <a class="nav-link active" href="{% url "accounts:citizen_profile" %}">
+                <i class="fas fa-user-edit me-2"></i>إدارة الملف الشخصي
+            </a>
+            <a class="nav-link" href="{% url "core:electoral_program_management" %}">
+                <i class="fas fa-list-check me-2"></i>البرنامج الانتخابي
+            </a>
+            <a class="nav-link" href="{% url "core:service_history_management" %}">
+                <i class="fas fa-history me-2"></i>تاريخ العمل العام
+            </a>
+            <a class="nav-link" href="{% url "core:messages_management" %}">
+                <i class="fas fa-envelope me-2"></i>الرسائل
+            </a>
+            <a class="nav-link" href="{% url "core:ratings_management" %}">
+                <i class="fas fa-star me-2"></i>التقييمات
+            </a>
+            <a class="nav-link" href="{% url "core:voting_results" %}">
+                <i class="fas fa-chart-bar me-2"></i>نتائج التصويت
+            </a>
+            <hr class="my-3" style="border-color: rgba(255,255,255,0.2);">
+            <a class="nav-link" href="{% url "core:candidate_logout" %}">
+                <i class="fas fa-sign-out-alt me-2"></i>تسجيل الخروج
+            </a>
+        </nav>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1><i class="fas fa-user-edit me-3"></i>إدارة الملف الشخصي</h1>
+            <p class="text-muted mb-0">قم بتحديث معلومات ملفك الشخصي وصورك</p>
+        </div>
+        
+        <!-- Profile Management Form -->
+        <div class="content-card">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h3 class="mb-3"><i class="fas fa-image me-2"></i>الصورة الشخصية</h3>
+                        <label for="profilePictureInput" class="profile-picture-upload d-block">
+                            {% if candidate.profile_picture %}
+                                <img src="{{ candidate.profile_picture.url }}" alt="صورة شخصية" class="img-fluid mb-3">
+                            {% else %}
+                                <i class="fas fa-user-circle fa-5x text-muted mb-3"></i>
+                            {% endif %}
+                            <p class="text-muted">انقر لرفع صورة شخصية جديدة</p>
+                            <input type="file" id="profilePictureInput" name="profile_picture" accept="image/*" class="d-none">
+                        </label>
+                    </div>
+                    <div class="col-md-6">
+                        <h3 class="mb-3"><i class="fas fa-panorama me-2"></i>صورة البانر</h3>
+                        <label for="bannerImageInput" class="banner-upload d-block">
+                            {% if candidate.banner_image %}
+                                <img src="{{ candidate.banner_image.url }}" alt="صورة بانر" class="img-fluid mb-3">
+                            {% else %}
+                                <i class="fas fa-image fa-5x text-muted mb-3"></i>
+                            {% endif %}
+                            <p class="text-muted">انقر لرفع صورة بانر جديدة</p>
+                            <input type="file" id="bannerImageInput" name="banner_image" accept="image/*" class="d-none">
+                        </label>
+                    </div>
+                </div>
+                
+                <h3 class="mb-3"><i class="fas fa-info-circle me-2"></i>المعلومات الأساسية</h3>
+                <div class="mb-3">
+                    <label for="candidateName" class="form-label">الاسم الكامل</label>
+                    <input type="text" class="form-control" id="candidateName" name="name" value="{{ candidate.name }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="candidateRole" class="form-label">الدور/المنصب</label>
+                    <input type="text" class="form-control" id="candidateRole" name="role" value="{{ candidate.role }}">
+                </div>
+                <div class="mb-3">
+                    <label for="candidateConstituency" class="form-label">الدائرة الانتخابية</label>
+                    <input type="text" class="form-control" id="candidateConstituency" name="constituency" value="{{ candidate.constituency }}">
+                </div>
+                <div class="mb-3">
+                    <label for="candidateBio" class="form-label">نبذة عن المرشح (السيرة الذاتية)</label>
+                    <textarea class="form-control" id="candidateBio" name="bio" rows="5">{{ candidate.bio }}</textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary mt-3">
+                    <i class="fas fa-save me-2"></i>حفظ التغييرات
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}إنشاء حساب جديد - نائبك دوت كوم{% endblock %}
+
+{% block meta_description %}أنشئ حسابك الجديد في منصة نائبك دوت كوم للتواصل مع المرشحين{% endblock %}
+
+{% block content %}
+<!-- Register Section -->
+<section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="card shadow-lg border-0">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <img src="{% static 'naebak/images/logo-naebak-green.png' %}" alt="نائبك دوت كوم" class="mb-3" style="height: 60px;">
+                            <h2 class="text-primary mb-2">إنشاء حساب جديد</h2>
+                            <p class="text-muted">انضم إلى منصة نائبك دوت كوم</p>
+                        </div>
+
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="first_name" class="form-label">الاسم الأول</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-user text-muted"></i>
+                                        </span>
+                                        <input type="text" class="form-control" id="first_name" name="first_name" required>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        يرجى إدخال الاسم الأول
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="last_name" class="form-label">الاسم الأخير</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-user text-muted"></i>
+                                        </span>
+                                        <input type="text" class="form-control" id="last_name" name="last_name" required>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        يرجى إدخال الاسم الأخير
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">البريد الإلكتروني</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-envelope text-muted"></i>
+                                        </span>
+                                        <input type="email" class="form-control" id="email" name="email" required>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        يرجى إدخال بريد إلكتروني صحيح
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label">رقم الهاتف</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-phone text-muted"></i>
+                                        </span>
+                                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="01xxxxxxxxx" required>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        يرجى إدخال رقم هاتف صحيح
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="governorate" class="form-label">المحافظة</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-map-marker-alt text-muted"></i>
+                                        </span>
+                                        <select class="form-select" id="governorate" name="governorate" required>
+                                            <option value="">-- اختر المحافظة --</option>
+                                            <option value="القاهرة">القاهرة</option>
+                                            <option value="الجيزة">الجيزة</option>
+                                            <option value="الإسكندرية">الإسكندرية</option>
+                                            <option value="القليوبية">القليوبية</option>
+                                            <option value="بورسعيد">بورسعيد</option>
+                                            <option value="السويس">السويس</option>
+                                            <option value="الأقصر">الأقصر</option>
+                                            <option value="أسوان">أسوان</option>
+                                            <option value="أسيوط">أسيوط</option>
+                                            <option value="البحيرة">البحيرة</option>
+                                            <option value="بني سويف">بني سويف</option>
+                                            <option value="الدقهلية">الدقهلية</option>
+                                            <option value="دمياط">دمياط</option>
+                                            <option value="الفيوم">الفيوم</option>
+                                            <option value="الغربية">الغربية</option>
+                                            <option value="الإسماعيلية">الإسماعيلية</option>
+                                            <option value="كفر الشيخ">كفر الشيخ</option>
+                                            <option value="مطروح">مطروح</option>
+                                            <option value="المنيا">المنيا</option>
+                                            <option value="المنوفية">المنوفية</option>
+                                            <option value="الوادي الجديد">الوادي الجديد</option>
+                                            <option value="شمال سيناء">شمال سيناء</option>
+                                            <option value="جنوب سيناء">جنوب سيناء</option>
+                                            <option value="البحر الأحمر">البحر الأحمر</option>
+                                            <option value="سوهاج">سوهاج</option>
+                                            <option value="قنا">قنا</option>
+                                            <option value="الشرقية">الشرقية</option>
+                                        </select>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        يرجى اختيار المحافظة
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="area_type" class="form-label">نوع المنطقة</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-building text-muted"></i>
+                                        </span>
+                                        <select class="form-select" id="area_type" name="area_type" required>
+                                            <option value="">-- اختر نوع المنطقة --</option>
+                                            <option value="مدينة">مدينة</option>
+                                            <option value="مركز">مركز</option>
+                                            <option value="حي">حي</option>
+                                            <option value="قرية">قرية</option>
+                                        </select>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        يرجى اختيار نوع المنطقة
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="area_name" class="form-label">اسم المنطقة</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-map-pin text-muted"></i>
+                                        </span>
+                                        <input type="text" class="form-control" id="area_name" name="area_name" placeholder="أدخل اسم المدينة/المركز/الحي/القرية" required>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        يرجى إدخال اسم المنطقة
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="address" class="form-label">عنوان المراسلات</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-home text-muted"></i>
+                                        </span>
+                                        <input type="text" class="form-control" id="address" name="address" placeholder="أدخل عنوان المراسلات التفصيلي" required>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        يرجى إدخال عنوان المراسلات
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="password1" class="form-label">كلمة المرور</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-lock text-muted"></i>
+                                        </span>
+                                        <input type="password" class="form-control" id="password1" name="password1" required>
+                                        <button class="btn btn-outline-secondary" type="button" id="togglePassword1">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        يرجى إدخال كلمة مرور قوية
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="password2" class="form-label">تأكيد كلمة المرور</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-lock text-muted"></i>
+                                        </span>
+                                        <input type="password" class="form-control" id="password2" name="password2" required>
+                                        <button class="btn btn-outline-secondary" type="button" id="togglePassword2">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        يرجى تأكيد كلمة المرور
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
+                                <label class="form-check-label" for="terms">
+                                    أوافق على <a href="{% url 'core:terms_of_service' %}" class="text-primary">شروط الاستخدام</a> و <a href="{% url 'core:privacy_policy' %}" class="text-primary">سياسة الخصوصية</a>
+                                </label>
+                                <div class="invalid-feedback">
+                                    يجب الموافقة على الشروط والأحكام
+                                </div>
+                            </div>
+
+                            <div class="d-grid mb-3">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-user-plus me-2"></i>إنشاء الحساب
+                                </button>
+                            </div>
+                        </form>
+
+                        <hr class="my-4">
+
+                        <div class="text-center">
+                            <p class="mb-0">لديك حساب بالفعل؟ <a href="{% url 'accounts:login' %}" class="text-primary text-decoration-none fw-bold">تسجيل الدخول</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+</script>
+{% endblock %}
+

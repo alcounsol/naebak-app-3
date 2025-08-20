@@ -1,0 +1,343 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}لوحة تحكم الأدمن - نائبك دوت كوم{% endblock %}
+
+{% block meta_description %}لوحة تحكم الأدمن الرئيسي لإدارة النظام{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="text-primary mb-4">لوحة تحكم الأدمن</h2>
+                <p class="text-muted">مرحباً بك في لوحة التحكم الرئيسية للنظام.</p>
+
+                <!-- Quick Stats -->
+                <div class="row mb-5">
+                    <div class="col-md-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4>{{ total_users }}</h4>
+                                        <p class="mb-0">إجمالي المستخدمين</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-users fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4>{{ total_candidates }}</h4>
+                                        <p class="mb-0">إجمالي المرشحين</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-user-tie fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4>{{ total_governorates }}</h4>
+                                        <p class="mb-0">إجمالي المحافظات</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-map-marker-alt fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4>{{ total_messages }}</h4>
+                                        <p class="mb-0">إجمالي الرسائل</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-envelope fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Management Cards -->
+                <div class="row mb-5">
+                    <div class="col-md-4">
+                        <div class="card shadow-lg border-0">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0"><i class="fas fa-users me-2"></i>إدارة المستخدمين</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">عرض وإدارة حسابات المستخدمين والمرشحين في النظام.</p>
+                                <a href="{% url 'core:user_management' %}" class="btn btn-primary">
+                                    <i class="fas fa-cog me-2"></i>إدارة المستخدمين
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow-lg border-0">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0"><i class="fas fa-newspaper me-2"></i>إدارة الأخبار</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">إدارة محتوى الشريط الإخباري والأخبار العامة للموقع.</p>
+                                <a href="{% url 'core:news_management' %}" class="btn btn-info">
+                                    <i class="fas fa-edit me-2"></i>إدارة الأخبار
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow-lg border-0">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>التقارير والإحصائيات</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">عرض التقارير المفصلة والإحصائيات الخاصة بالنظام.</p>
+                                <a href="{% url 'core:reports_dashboard' %}" class="btn btn-success">
+                                    <i class="fas fa-chart-line me-2"></i>عرض التقارير
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional Management Section -->
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <div class="card shadow-lg border-0">
+                            <div class="card-header bg-secondary text-white">
+                                <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>مراقبة النشاط</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">مراقبة أنشطة المستخدمين وسجلات النظام والتنبيهات الأمنية.</p>
+                                <a href="{% url 'core:activity_monitoring' %}" class="btn btn-secondary">
+                                    <i class="fas fa-eye me-2"></i>مراقبة النشاط
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card shadow-lg border-0">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>التقارير المفصلة</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">تقارير مفصلة عن أداء المرشحين وتفاعل المواطنين.</p>
+                                <a href="{% url 'core:reports_dashboard' %}" class="btn btn-success">
+                                    <i class="fas fa-file-alt me-2"></i>عرض التقارير
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Candidate Management Section -->
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <div class="card shadow-lg border-0">
+                            <div class="card-header bg-warning text-dark">
+                                <h5 class="mb-0"><i class="fas fa-user-plus me-2"></i>إنشاء حساب مرشح</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">إنشاء حساب جديد لمرشح مع تحديد المحافظة والدائرة الانتخابية.</p>
+                                <a href="{% url 'core:create_candidate' %}" class="btn btn-warning text-dark">
+                                    <i class="fas fa-plus me-2"></i>إنشاء مرشح جديد
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card shadow-lg border-0">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0"><i class="fas fa-users-cog me-2"></i>إدارة المرشحين</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">عرض وتعديل وحذف حسابات المرشحين الموجودين في النظام.</p>
+                                <a href="{% url 'core:manage_candidates' %}" class="btn btn-info">
+                                    <i class="fas fa-list me-2"></i>إدارة المرشحين
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backup and Restore Section -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card shadow-lg border-0">
+                            <div class="card-header bg-dark text-white">
+                                <h5 class="mb-0"><i class="fas fa-database me-2"></i>إدارة النسخ الاحتياطية</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="card border-success">
+                                            <div class="card-body text-center">
+                                                <i class="fas fa-download fa-3x text-success mb-3"></i>
+                                                <h5 class="card-title">إنشاء نسخة احتياطية</h5>
+                                                <p class="card-text">قم بتحميل نسخة احتياطية من جميع بيانات النظام.</p>
+                                                <a href="{% url 'core:backup_data' %}" class="btn btn-success btn-lg" id="backupBtn">
+                                                    <i class="fas fa-download me-2"></i>تحميل النسخة الاحتياطية
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card border-warning">
+                                            <div class="card-body text-center">
+                                                <i class="fas fa-upload fa-3x text-warning mb-3"></i>
+                                                <h5 class="card-title">استعادة البيانات</h5>
+                                                <p class="card-text">قم برفع ملف النسخة الاحتياطية لاستعادة البيانات.</p>
+                                                <button type="button" class="btn btn-warning btn-lg" data-bs-toggle="modal" data-bs-target="#restoreModal">
+                                                    <i class="fas fa-upload me-2"></i>استعادة البيانات
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="alert alert-info mt-4" role="alert">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <strong>تنبيه:</strong> يُنصح بإنشاء نسخة احتياطية بانتظام لضمان سلامة البيانات. عند استعادة البيانات، تأكد من أن الملف صحيح وغير تالف.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Restore Modal -->
+<div class="modal fade" id="restoreModal" tabindex="-1" aria-labelledby="restoreModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="restoreModalLabel">استعادة البيانات</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="restoreForm" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="backupFile" class="form-label">اختر ملف النسخة الاحتياطية</label>
+                        <input type="file" class="form-control" id="backupFile" name="backup_file" accept=".json" required>
+                        <div class="form-text">يجب أن يكون الملف من نوع JSON.</div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="clearExisting" name="clear_existing" value="true">
+                            <label class="form-check-label" for="clearExisting">
+                                حذف البيانات الموجودة قبل الاستعادة
+                            </label>
+                            <div class="form-text text-danger">تحذير: هذا الخيار سيحذف جميع البيانات الحالية!</div>
+                        </div>
+                    </div>
+                    <div id="restoreProgress" class="d-none">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
+                        </div>
+                        <p class="mt-2 text-center">جاري استعادة البيانات...</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-warning" id="restoreSubmitBtn">
+                        <i class="fas fa-upload me-2"></i>استعادة البيانات
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Backup button click handler
+    document.getElementById('backupBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Show loading state
+        const originalText = this.innerHTML;
+        this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>جاري إنشاء النسخة الاحتياطية...';
+        this.disabled = true;
+        
+        // Create a temporary link to download the file
+        const link = document.createElement('a');
+        link.href = this.href;
+        link.download = '';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Reset button after a delay
+        setTimeout(() => {
+            this.innerHTML = originalText;
+            this.disabled = false;
+        }, 3000);
+    });
+    
+    // Restore form submission
+    document.getElementById('restoreForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const submitBtn = document.getElementById('restoreSubmitBtn');
+        const progress = document.getElementById('restoreProgress');
+        
+        // Show progress
+        progress.classList.remove('d-none');
+        submitBtn.disabled = true;
+        
+        fetch('{% url "core:restore_data" %}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            progress.classList.add('d-none');
+            submitBtn.disabled = false;
+            
+            if (data.success) {
+                alert('تم استعادة البيانات بنجاح!');
+                location.reload();
+            } else {
+                alert('حدث خطأ: ' + data.error);
+            }
+        })
+        .catch(error => {
+            progress.classList.add('d-none');
+            submitBtn.disabled = false;
+            alert('حدث خطأ في الاتصال: ' + error.message);
+        });
+    });
+});
+</script>
+{% endblock %}
+

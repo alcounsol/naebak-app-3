@@ -1,0 +1,386 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}نائبك دوت كوم - الصفحة الرئيسية{% endblock %}
+
+{% block meta_description %}منصة نائبك دوت كوم للتواصل مع المرشحين والمواطنين في جميع محافظات مصر{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-banner">
+    <div class="container-fluid p-0">
+        <div class="banner-image">
+            <img src="{% static 'naebak/images/sisi-banner.jpg' %}" alt="مصر" class="img-fluid w-100" style="height: 500px; object-fit: cover; display: block;">
+        </div>
+    </div>
+</section>
+
+<!-- News Ticker -->
+<section class="news-ticker-section">
+    <div class="container-fluid">
+        <div class="news-ticker">
+            <div class="ticker-label">
+                <i class="fas fa-newspaper me-2"></i>آخر الأخبار
+            </div>
+            <div class="ticker-content">
+                <div class="ticker-item">إطلاق منصة نائبك دوت كوم الجديدة للتواصل مع المرشحين والمواطنين</div>
+                <div class="ticker-item">تطوير المنصة الإلكترونية لتوفير أفضل تجربة للمستخدمين</div>
+                <div class="ticker-item">إضافة ميزات جديدة للمنصة لتحسين التفاعل بين المرشحين والمواطنين</div>
+                <div class="ticker-item">انطلاق حملة التسجيل للمواطنين في جميع محافظات مصر</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="section bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card text-center">
+                    <div class="stats-icon">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <div class="stats-number text-primary">27</div>
+                    <div class="stats-label">محافظة</div>
+                    <div class="stats-description">تغطي جميع أنحاء الجمهورية</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card text-center">
+                    <div class="stats-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stats-number text-primary">1,250</div>
+                    <div class="stats-label">مرشح</div>
+                    <div class="stats-description">يخدمون الشعب المصري</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card text-center">
+                    <div class="stats-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <div class="stats-number text-primary">50,000</div>
+                    <div class="stats-label">مواطن</div>
+                    <div class="stats-description">مسجل في المنصة</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Platform Section -->
+<section class="section bg-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-12 text-center">
+                <div class="about-platform">
+                    <div class="platform-logo mb-4">
+                        <img src="{% static 'naebak/images/logo-naebak-green.png' %}" alt="نائبك دوت كوم" class="img-fluid" style="max-height: 120px;">
+                    </div>
+                    <div class="platform-description">
+                        <p class="lead text-dark text-center">
+                            موقع نائبك دوت كوم هو حلقة الاتصال الأسرع والأقوى بين المواطن ومن يمثله في مجلس النواب، وهو أداة قياس محايدة لتقييم النائب ومدى قدرته على تمثيل أبناء دائرته من الشعب المصري العظيم في ظل قيادة حكيمة متمثلة في سيادة الرئيس عبد الفتاح السيسي.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% if featured_candidates %}
+<section class="section bg-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="section-title text-primary">المرشحون المميزون</h2>
+                <p class="lead text-muted">تعرف على أبرز المرشحين في منصة نائبك دوت كوم</p>
+            </div>
+        </div>
+        <div class="row">
+            {% for candidate in featured_candidates %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card candidate-card shadow-sm h-100">
+                    <img src="{% static 'naebak/images/default-candidate.png' %}" class="card-img-top" alt="{{ candidate.name }}">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-primary">{{ candidate.name }}</h5>
+                        <p class="card-text text-muted">{{ candidate.constituency }}</p>
+                        <a href="{% url 'candidates:candidate_detail' candidate.id %}" class="btn btn-outline-primary btn-sm mt-2">عرض الملف الشخصي</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Quick Login Section -->
+{% if not user.is_authenticated %}
+<section class="section bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="section-title text-primary">تسجيل دخول سريع</h2>
+                <p class="lead text-muted">اختر محافظتك وادخل بياناتك للبدء في التصويت والتقييم والتواصل مع المرشحين</p>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-12">
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-body p-4">
+                        <form id="quickLoginForm" method="post"action="{% url 'accounts:quick_login' %}">
+                            {% csrf_token %}
+                            <div class="row g-4">
+                                <div class="col-lg-4 col-md-6">
+                                    <label for="governorate" class="form-label fw-bold text-dark">
+                                        <i class="fas fa-map-marker-alt text-primary me-2"></i>اختر محافظتك
+                                    </label>
+                                    <select class="form-select form-select-lg border-2" id="governorate" name="governorate" required>
+                                        <option value="">-- اختر المحافظة --</option>
+                                        <option value="القاهرة">القاهرة</option>
+                                        <option value="الجيزة">الجيزة</option>
+                                        <option value="الإسكندرية">الإسكندرية</option>
+                                        <option value="القليوبية">القليوبية</option>
+                                        <option value="بورسعيد">بورسعيد</option>
+                                        <option value="السويس">السويس</option>
+                                        <option value="الأقصر">الأقصر</option>
+                                        <option value="أسوان">أسوان</option>
+                                        <option value="أسيوط">أسيوط</option>
+                                        <option value="البحيرة">البحيرة</option>
+                                        <option value="بني سويف">بني سويف</option>
+                                        <option value="الدقهلية">الدقهلية</option>
+                                        <option value="دمياط">دمياط</option>
+                                        <option value="الفيوم">الفيوم</option>
+                                        <option value="الغربية">الغربية</option>
+                                        <option value="الإسماعيلية">الإسماعيلية</option>
+                                        <option value="كفر الشيخ">كفر الشيخ</option>
+                                        <option value="مطروح">مطروح</option>
+                                        <option value="المنيا">المنيا</option>
+                                        <option value="المنوفية">المنوفية</option>
+                                        <option value="الوادي الجديد">الوادي الجديد</option>
+                                        <option value="شمال سيناء">شمال سيناء</option>
+                                        <option value="قنا">قنا</option>
+                                        <option value="البحر الأحمر">البحر الأحمر</option>
+                                        <option value="الشرقية">الشرقية</option>
+                                        <option value="سوهاج">سوهاج</option>
+                                        <option value="جنوب سيناء">جنوب سيناء</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <label for="citizen_name" class="form-label fw-bold text-dark">
+                                        <i class="fas fa-user text-primary me-2"></i>الاسم الكامل
+                                    </label>
+                                    <input type="text" class="form-control form-control-lg border-2" id="citizen_name" name="citizen_name" placeholder="أدخل اسمك الكامل" required>
+                                </div>
+                                <div class="col-lg-4 col-md-12">
+                                    <label for="phone_number" class="form-label fw-bold text-dark">
+                                        <i class="fas fa-phone text-primary me-2"></i>رقم الهاتف
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="tel" class="form-control form-control-lg border-2" id="phone_number" name="phone_number" placeholder="01xxxxxxxxx" required>
+                                        <button type="submit" class="btn btn-success btn-lg px-4">
+                                            <i class="fas fa-sign-in-alt me-2"></i>دخول سريع
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="text-center">
+                            <h5 class="text-primary mb-4">ماذا يمكنك فعله بعد الدخول؟</h5>
+                            <div class="row g-3">
+                                <div class="col-lg-3 col-md-6 col-sm-6">
+                                    <div class="feature-card text-center p-3 h-100 border rounded-3">
+                                        <i class="fas fa-vote-yea text-primary fs-1 mb-3"></i>
+                                        <h6 class="fw-bold text-dark">التصويت</h6>
+                                        <p class="small text-muted mb-0">صوت لمرشحك المفضل</p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6 col-sm-6">
+                                    <div class="feature-card text-center p-3 h-100 border rounded-3">
+                                        <i class="fas fa-star text-warning fs-1 mb-3"></i>
+                                        <h6 class="fw-bold text-dark">تقييم المرشحين</h6>
+                                        <p class="small text-muted mb-0">قيم أداء المرشحين</p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6 col-sm-6">
+                                    <div class="feature-card text-center p-3 h-100 border rounded-3">
+                                        <i class="fas fa-bullhorn text-info fs-1 mb-3"></i>
+                                        <h6 class="fw-bold text-dark">دعم بلافتة</h6>
+                                        <p class="small text-muted mb-0">ادعم مرشحك بلافتة</p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6 col-sm-6">
+                                    <div class="feature-card text-center p-3 h-100 border rounded-3">
+                                        <i class="fas fa-comments text-success fs-1 mb-3"></i>
+                                        <h6 class="fw-bold text-dark">محادثة مباشرة</h6>
+                                        <p class="small text-muted mb-0">تواصل مع المرشح</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% else %}
+<!-- Welcome Section for Logged-in Users -->
+<section class="section bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-12">
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-body p-5 text-center">
+                        <div class="welcome-icon mb-4">
+                            <i class="fas fa-user-check text-success" style="font-size: 4rem;"></i>
+                        </div>
+                        <h2 class="text-primary mb-3">مرحباً بك، {{ user.get_full_name|default:user.username }}!</h2>
+                        <p class="lead text-muted mb-4">أهلاً وسهلاً بك في منصة نائبك دوت كوم. يمكنك الآن الاستفادة من جميع الخدمات المتاحة.</p>
+                        
+                        <div class="row g-3 mt-4">
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                        <a href="{% url 'candidates:candidate_list' %}" class="text-decoration-none">
+                                    <div class="feature-card text-center p-3 h-100 border rounded-3 hover-card">
+                                        <i class="fas fa-vote-yea text-primary fs-1 mb-3"></i>
+                                        <h6 class="fw-bold text-dark">التصويت</h6>
+                                        <p class="small text-muted mb-0">صوت لمرشحك المفضل</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                        <a href="{% url 'candidates:candidate_list' %}" class="text-decoration-none">
+                                    <div class="feature-card text-center p-3 h-100 border rounded-3 hover-card">
+                                        <i class="fas fa-star text-warning fs-1 mb-3"></i>
+                                        <h6 class="fw-bold text-dark">تقييم المرشحين</h6>
+                                        <p class="small text-muted mb-0">قيم أداء المرشحين</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                        <a href="{% url 'candidates:candidate_list' %}" class="text-decoration-none">
+                                    <div class="feature-card text-center p-3 h-100 border rounded-3 hover-card">
+                                        <i class="fas fa-bullhorn text-info fs-1 mb-3"></i>
+                                        <h6 class="fw-bold text-dark">دعم بلافتة</h6>
+                                        <p class="small text-muted mb-0">ادعم مرشحك بلافتة</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <a href="{% url 'core:conversations' %}" class="text-decoration-none">
+                                    <div class="feature-card text-center p-3 h-100 border rounded-3 hover-card">
+                                        <i class="fas fa-comments text-success fs-1 mb-3"></i>
+                                        <h6 class="fw-bold text-dark">محادثة مباشرة</h6>
+                                        <p class="small text-muted mb-0">تواصل مع المرشح</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <a href="{% url 'core:governorates' %}" class="btn btn-primary btn-lg me-3">
+                                <i class="fas fa-map-marked-alt me-2"></i>استكشف المحافظات
+                            </a>
+                            <a href="{% url 'candidates:candidate_list' %}" class="btn btn-outline-primary btn-lg">
+                                <i class="fas fa-users me-2"></i>تصفح المرشحين
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Home page specific JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    // Animate statistics on scroll
+    const stats = document.querySelectorAll('.stats-number');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateNumber(entry.target);
+                observer.unobserve(entry.target);
+            }
+        });
+    });
+    
+    stats.forEach(stat => observer.observe(stat));
+});
+
+function animateNumber(element) {
+    const target = parseInt(element.textContent.replace(/[^\d]/g, ''));
+    if (isNaN(target)) {
+        element.textContent = '0'; // Display 0 if not a valid number
+        return;
+    }
+    const duration = 2000;
+    const step = target / (duration / 16);
+    let current = 0;
+    
+    const timer = setInterval(() => {
+        current += step;
+        if (current >= target) {
+            current = target;
+            clearInterval(timer);
+        }
+        element.textContent = Math.floor(current).toLocaleString('ar-EG');
+    }, 16);
+}
+</script>
+{% endblock %}
+
+
+
+<!-- Featured Candidates Section -->
+<section class="section bg-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="section-title text-primary">المرشحون المميزون</h2>
+                <p class="lead text-muted">تعرف على أبرز المرشحين في محافظتك</p>
+            </div>
+        </div>
+        <div class="row">
+            {% for fc in featured_candidates %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card candidate-card shadow-sm border-0 rounded-4">
+                    <div class="card-body text-center">
+                        <img src="{% if fc.candidate.profile_picture %}{{ fc.candidate.profile_picture.url }}{% else %}{% static 'naebak/images/default-candidate.png' %}{% endif %}" alt="{{ fc.candidate.name }}" class="img-fluid rounded-circle mb-3" style="width: 120px; height: 120px; object-fit: cover;">
+                        <h5 class="card-title fw-bold text-dark">{{ fc.candidate.name }}</h5>
+                        <p class="card-text text-muted">{{ fc.candidate.constituency }}</p>
+                        <div class="d-flex justify-content-center mb-3">
+                            {% for _ in "12345" %}
+                                {% if forloop.counter <= fc.candidate.avg_rating|floatformat:0 %}
+                                    <i class="fas fa-star text-warning"></i>
+                                {% else %}
+                                    <i class="far fa-star text-muted"></i>
+                                {% endif %}
+                            {% endfor %}
+                            <span class="ms-2 text-muted">({{ fc.candidate.total_ratings }})</span>
+                        </div>
+                        <a href="{% url 'core:candidate_detail' fc.candidate.id %}" class="btn btn-primary btn-sm">عرض الملف الشخصي</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="lead text-muted">لا يوجد مرشحون مميزون حالياً.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+

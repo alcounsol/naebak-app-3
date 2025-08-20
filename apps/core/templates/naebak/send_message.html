@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }} - نائبك دوت كوم{% endblock %}
+
+{% block meta_description %}إرسال رسالة إلى المرشح {{ candidate.name }}{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Candidate Info Card -->
+                <div class="card shadow-lg border-0 mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                {% if candidate.photo %}
+                                    <img src="{{ candidate.photo.url }}" alt="{{ candidate.name }}" class="rounded-circle" width="60" height="60">
+                                {% else %}
+                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                        <i class="fas fa-user fa-2x text-muted"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col">
+                                <h5 class="mb-1">{{ candidate.name }}</h5>
+                                <p class="mb-0">{{ candidate.role }}</p>
+                                {% if candidate.governorate %}
+                                    <small>{{ candidate.governorate.name }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Message Form -->
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-envelope me-2"></i>إرسال رسالة جديدة
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data" id="messageForm">
+                            {% csrf_token %}
+                            
+                            {% if not user.is_authenticated %}
+                            <!-- Anonymous User Fields -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="sender_name" class="form-label">الاسم الكامل <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="sender_name" name="sender_name" required maxlength="200">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="sender_email" class="form-label">البريد الإلكتروني <span class="text-danger">*</span></label>
+                                    <input type="email" class="form-control" id="sender_email" name="sender_email" required>
+                                </div>
+                            </div>
+                            {% else %}
+                            <!-- Authenticated User Info -->
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                سيتم إرسال الرسالة باسم: <strong>{{ user.get_full_name|default:user.username }}</strong>
+                                {% if user.email %}
+                                    ({{ user.email }})
+                                {% endif %}
+                            </div>
+                            {% endif %}
+
+                            <div class="mb-3">
+                                <label for="subject" class="form-label">موضوع الرسالة <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="subject" name="subject" required maxlength="300" placeholder="اكتب موضوع الرسالة...">
+                                <div class="form-text">الحد الأقصى 300 حرف</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="content" class="form-label">محتوى الرسالة <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="content" name="content" rows="8" required maxlength="5000" placeholder="اكتب رسالتك هنا..."></textarea>
+                                <div class="form-text">
+                                    <span id="charCount">0</span> / 5000 حرف
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="attachment" class="form-label">مرفق (اختياري)</label>
+                                <input type="file" class="form-control" id="attachment" name="attachment" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif">
+                                <div class="form-text">يمكنك إرفاق ملف (PDF, Word, صورة) - الحد الأقصى 10 ميجابايت</div>
+                            </div>
+
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <strong>تنبيه:</strong> يرجى التأكد من أن رسالتك مهذبة ومحترمة. الرسائل المسيئة أو غير اللائقة سيتم حذفها.
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="{% url 'naebak:candidate_detail' candidate.id %}" class="btn btn-secondary me-md-2">
+                                    <i class="fas fa-arrow-right me-2"></i>إلغاء
+                                </a>
+                                <button type="submit" class="btn btn-success" id="submitBtn">
+                                    <i class="fas fa-paper-plane me-2"></i>إرسال الرسالة
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Guidelines Card -->
+                <div class="card border-info mt-4">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="mb-0">
+                            <i class="fas fa-lightbulb me-2"></i>إرشادات لكتابة رسالة فعالة
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="mb-0">
+                            <li>اكتب موضوعاً واضحاً ومحدداً للرسالة</li>
+                            <li>استخدم لغة مهذبة ومحترمة</li>
+                            <li>اذكر التفاصيل المهمة بوضوح</li>
+                            <li>تجنب الإطالة غير المبررة</li>
+                            <li>تأكد من صحة معلومات الاتصال الخاصة بك</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const contentTextarea = document.getElementById('content');
+    const charCount = document.getElementById('charCount');
+    const submitBtn = document.getElementById('submitBtn');
+    const messageForm = document.getElementById('messageForm');
+
+    // Character counter
+    contentTextarea.addEventListener('input', function() {
+        const currentLength = this.value.length;
+        charCount.textContent = currentLength;
+        
+        if (currentLength > 5000) {
+            charCount.style.color = 'red';
+        } else if (currentLength > 4500) {
+            charCount.style.color = 'orange';
+        } else {
+            charCount.style.color = 'green';
+        }
+    });
+
+    // Form submission
+    messageForm.addEventListener('submit', function(e) {
+        const subject = document.getElementById('subject').value.trim();
+        const content = document.getElementById('content').value.trim();
+        
+        if (!subject) {
+            alert('يرجى إدخال موضوع الرسالة');
+            e.preventDefault();
+            return;
+        }
+        
+        if (!content) {
+            alert('يرجى إدخال محتوى الرسالة');
+            e.preventDefault();
+            return;
+        }
+        
+        if (content.length > 5000) {
+            alert('محتوى الرسالة طويل جداً (الحد الأقصى 5000 حرف)');
+            e.preventDefault();
+            return;
+        }
+
+        // Show loading state
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>جاري الإرسال...';
+        submitBtn.disabled = true;
+    });
+
+    // File size validation
+    document.getElementById('attachment').addEventListener('change', function() {
+        const file = this.files[0];
+        if (file && file.size > 10 * 1024 * 1024) { // 10MB
+            alert('حجم الملف كبير جداً. الحد الأقصى 10 ميجابايت.');
+            this.value = '';
+        }
+    });
+});
+</script>
+{% endblock %}
+

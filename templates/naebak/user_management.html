@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}إدارة المستخدمين - نائبك دوت كوم{% endblock %}
+
+{% block meta_description %}لوحة تحكم الأدمن لإدارة حسابات المستخدمين{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="text-primary mb-4">إدارة المستخدمين</h2>
+                <p class="text-muted">هنا يمكنك عرض وإدارة حسابات المستخدمين في النظام.</p>
+
+                <div class="card shadow-lg border-0 mb-4">
+                    <div class="card-body p-4">
+                        <form method="get" class="row g-3 align-items-center">
+                            <div class="col-md-4">
+                                <input type="text" name="search" class="form-control" placeholder="بحث باسم المستخدم أو البريد الإلكتروني" value="{{ request.GET.search }}">
+                            </div>
+                            <div class="col-md-3">
+                                <select name="role" class="form-select">
+                                    <option value="">جميع الأدوار</option>
+                                    <option value="citizen" {% if request.GET.role == 'citizen' %}selected{% endif %}>مواطن</option>
+                                    <option value="candidate" {% if request.GET.role == 'candidate' %}selected{% endif %}>مرشح</option>
+                                    <option value="admin" {% if request.GET.role == 'admin' %}selected{% endif %}>أدمن</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select name="status" class="form-select">
+                                    <option value="">جميع الحالات</option>
+                                    <option value="active" {% if request.GET.status == 'active' %}selected{% endif %}>نشط</option>
+                                    <option value="inactive" {% if request.GET.status == 'inactive' %}selected{% endif %}>غير نشط</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary w-100">بحث وتصفية</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>اسم المستخدم</th>
+                                <th>البريد الإلكتروني</th>
+                                <th>الدور</th>
+                                <th>الحالة</th>
+                                <th>تاريخ الانضمام</th>
+                                <th>إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    {% if user.is_superuser %}
+                                        أدمن
+                                    {% elif user.candidate_profile %}
+                                        مرشح
+                                    {% else %}
+                                        مواطن
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if user.is_active %}
+                                        <span class="badge bg-success">نشط</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">غير نشط</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ user.date_joined|date:"Y-m-d" }}</td>
+                                <td>
+                                    <a href="#" class="btn btn-sm btn-info me-2">عرض</a>
+                                    <a href="#" class="btn btn-sm btn-warning me-2">تعديل</a>
+                                    <a href="#" class="btn btn-sm btn-danger">حذف</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center">لا يوجد مستخدمون مطابقون لمعايير البحث.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        {% if users.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{ users.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.role %}&role={{ request.GET.role }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">السابق</a></li>
+                        {% endif %}
+                        {% for i in users.paginator.page_range %}
+                        <li class="page-item {% if users.number == i %}active{% endif %}"><a class="page-link" href="?page={{ i }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.role %}&role={{ request.GET.role }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">{{ i }}</a></li>
+                        {% endfor %}
+                        {% if users.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ users.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.role %}&role={{ request.GET.role }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">التالي</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Add any specific JS for user management here if needed
+</script>
+{% endblock %}
+
+

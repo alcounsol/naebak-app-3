@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .messages-container {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-top: 2rem;
+    }
+    .message-item {
+        padding: 1rem 0;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+    }
+    .message-item:last-child {
+        border-bottom: none;
+    }
+    .message-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #e3f2fd;
+        color: #1976d2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 1rem;
+        font-size: 1.2rem;
+    }
+    .message-content {
+        flex-grow: 1;
+    }
+    .message-subject {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+    .message-meta {
+        color: #666;
+        font-size: 0.85rem;
+    }
+    .message-actions a {
+        margin-left: 0.5rem;
+    }
+    .badge-primary {
+        background-color: #007bff;
+    }
+    .pagination .page-item .page-link {
+        color: #2E8B57;
+    }
+    .pagination .page-item.active .page-link {
+        background-color: #2E8B57;
+        border-color: #2E8B57;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="my-4 text-center">{{ page_title }}</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="messages-container">
+                {% if messages %}
+                    <ul class="list-unstyled">
+                        {% for message in messages %}
+                            <li class="message-item">
+                                <div class="message-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="message-content">
+                                    <div class="message-subject">{{ message.subject }}</div>
+                                    <div class="message-meta">
+                                        من: {{ message.sender_name }} ({{ message.sender_email }}) - {{ message.timestamp|timesince }} مضت
+                                        {% if not message.is_read %}
+                                            <span class="badge badge-primary">جديد</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="message-actions">
+                                    <a href="{% url 'core:candidate_message_reply' message.id %}" class="btn btn-sm btn-info">
+                                        <i class="fas fa-reply"></i> رد
+                                    </a>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    <!-- Pagination -->
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center mt-4">
+                            {% if messages.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ messages.previous_page_number }}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% for i in messages.paginator.page_range %}
+                                <li class="page-item {% if messages.number == i %}active{% endif %}">
+                                    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                </li>
+                            {% endfor %}
+
+                            {% if messages.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ messages.next_page_number }}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+
+                {% else %}
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-inbox fa-3x mb-3"></i>
+                        <p>لا توجد رسائل واردة حتى الآن.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

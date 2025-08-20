@@ -1,0 +1,294 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}مرشحو {{ governorate.name_ar }} - نائبك{% endblock %}
+
+{% block extra_css %}
+<style>
+    .candidates-header {
+        background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+        color: white;
+        padding: 60px 0;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .candidates-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .candidates-header p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+    }
+
+    .candidates-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 25px;
+        padding: 0 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .candidate-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+    .candidate-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        border-color: #4CAF50;
+    }
+
+    .candidate-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+    }
+
+    .candidate-info {
+        padding: 20px;
+    }
+
+    .candidate-name {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 8px;
+    }
+
+    .candidate-details {
+        margin-bottom: 15px;
+    }
+
+    .detail-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+        color: #555;
+    }
+
+    .detail-icon {
+        width: 16px;
+        height: 16px;
+        margin-left: 8px;
+        color: #4CAF50;
+    }
+
+    .candidate-symbol {
+        display: inline-block;
+        background: #4CAF50;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-left: 8px;
+    }
+
+    .election-number {
+        background: #2196F3;
+        color: white;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .rating-stars {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .star {
+        color: #FFD700;
+        font-size: 1.1rem;
+        margin-left: 2px;
+    }
+
+    .star.empty {
+        color: #ddd;
+    }
+
+    .rating-text {
+        margin-right: 8px;
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .view-profile-btn {
+        width: 100%;
+        background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .view-profile-btn:hover {
+        background: linear-gradient(135deg, #388E3C 0%, #2E7D32 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        color: white;
+        text-decoration: none;
+    }
+
+    .no-candidates {
+        text-align: center;
+        padding: 60px 20px;
+        color: #666;
+    }
+
+    .no-candidates h3 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        color: #888;
+    }
+
+    .back-to-governorate {
+        text-align: center;
+        margin: 40px 0;
+    }
+
+    .back-btn {
+        background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+        color: white;
+        padding: 12px 30px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .back-btn:hover {
+        background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(33, 150, 243, 0.3);
+        color: white;
+        text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+        .candidates-grid {
+            grid-template-columns: 1fr;
+            padding: 0 15px;
+        }
+        
+        .candidates-header h1 {
+            font-size: 2rem;
+        }
+        
+        .candidates-header {
+            padding: 40px 0;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="candidates-header">
+    <div class="container">
+        <h1>مرشحو {{ governorate.name_ar }}</h1>
+        <p>جميع المرشحين المسجلين في محافظة {{ governorate.name_ar }}</p>
+    </div>
+</div>
+
+<div class="container">
+    {% if candidates %}
+        <div class="candidates-grid">
+            {% for candidate in candidates %}
+            <div class="candidate-card">
+                {% if candidate.profile_image %}
+                    <img src="{{ candidate.profile_image.url }}" alt="{{ candidate.name }}" class="candidate-image">
+                {% else %}
+                    <div class="candidate-image" style="display: flex; align-items: center; justify-content: center; background: linear-gradient(45deg, #f0f0f0, #e0e0e0); color: #999; font-size: 1.2rem;">
+                        <i class="fas fa-user" style="font-size: 3rem;"></i>
+                    </div>
+                {% endif %}
+                
+                <div class="candidate-info">
+                    <h3 class="candidate-name">{{ candidate.name }}</h3>
+                    
+                    <div class="candidate-details">
+                        <div class="detail-item">
+                            <i class="fas fa-briefcase detail-icon"></i>
+                            <span>{{ candidate.role }}</span>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <i class="fas fa-map-marker-alt detail-icon"></i>
+                            <span>{{ candidate.electoral_district }}</span>
+                        </div>
+                        
+                        {% if candidate.campaign_symbol %}
+                        <div class="detail-item">
+                            <i class="fas fa-flag detail-icon"></i>
+                            <span>رمز الترشح: <span class="candidate-symbol">{{ candidate.campaign_symbol }}</span></span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if candidate.election_number %}
+                        <div class="detail-item">
+                            <i class="fas fa-hashtag detail-icon"></i>
+                            <span>الرقم الانتخابي: <span class="election-number">{{ candidate.election_number }}</span></span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="rating-stars">
+                        <span class="rating-text">التقييم:</span>
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= candidate.average_rating|floatformat:0 %}
+                                <span class="star">★</span>
+                            {% else %}
+                                <span class="star empty">★</span>
+                            {% endif %}
+                        {% endfor %}
+                        <span style="margin-right: 8px; font-size: 0.9rem; color: #666;">
+                            ({{ candidate.average_rating|floatformat:1 }})
+                        </span>
+                    </div>
+                    
+                    <a href="{% url 'naebak:candidate_detail' candidate.id %}" class="view-profile-btn">
+                        <i class="fas fa-eye" style="margin-left: 8px;"></i>
+                        عرض الملف الشخصي
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-candidates">
+            <h3>لا يوجد مرشحون مسجلون</h3>
+            <p>لم يتم تسجيل أي مرشحين في هذه المحافظة بعد.</p>
+        </div>
+    {% endif %}
+    
+    <div class="back-to-governorate">
+        <a href="{% url 'governorate_page' governorate.slug %}" class="back-btn">
+            <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+            العودة إلى صفحة {{ governorate.name_ar }}
+        </a>
+    </div>
+</div>
+{% endblock %}
+

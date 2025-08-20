@@ -1,0 +1,379 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }} - نائبك دوت كوم{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-container {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+    
+    .form-section {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .form-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+    
+    .section-title {
+        color: var(--primary-color);
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .form-label {
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 8px;
+    }
+    
+    .form-control, .form-select {
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        padding: 12px 15px;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
+    }
+    
+    .form-check-input:checked {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+    
+    .btn-submit {
+        background: var(--primary-color);
+        border: none;
+        color: white;
+        padding: 15px 30px;
+        border-radius: 25px;
+        font-weight: bold;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-submit:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    
+    .btn-cancel {
+        background: #6c757d;
+        border: none;
+        color: white;
+        padding: 15px 30px;
+        border-radius: 25px;
+        font-weight: bold;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-cancel:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+    }
+    
+    .priority-preview {
+        padding: 10px 15px;
+        border-radius: 10px;
+        margin-top: 10px;
+        font-weight: bold;
+        text-align: center;
+    }
+    
+    .priority-low-preview {
+        background: #e9ecef;
+        color: #6c757d;
+    }
+    
+    .priority-normal-preview {
+        background: #cce5ff;
+        color: #0066cc;
+    }
+    
+    .priority-high-preview {
+        background: #ffe6cc;
+        color: #cc6600;
+    }
+    
+    .priority-urgent-preview {
+        background: #ffcccc;
+        color: #cc0000;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.7; }
+        100% { opacity: 1; }
+    }
+    
+    .character-count {
+        font-size: 0.9rem;
+        color: #666;
+        text-align: left;
+        margin-top: 5px;
+    }
+    
+    .help-text {
+        font-size: 0.9rem;
+        color: #666;
+        margin-top: 5px;
+        font-style: italic;
+    }
+    
+    .required-field {
+        color: #dc3545;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h2 class="text-center mb-4">
+                <i class="fas fa-plus-circle me-2"></i>
+                إنشاء خبر جديد
+            </h2>
+            
+            <form method="POST" class="form-container">
+                {% csrf_token %}
+                
+                <!-- Basic Information Section -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-info-circle"></i>
+                        المعلومات الأساسية
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="title" class="form-label">
+                            عنوان الخبر <span class="required-field">*</span>
+                        </label>
+                        <input type="text" class="form-control" id="title" name="title" 
+                               required maxlength="200" onkeyup="updateCharCount('title', 200)">
+                        <div class="character-count" id="title-count">0 / 200 حرف</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="content" class="form-label">
+                            محتوى الخبر <span class="required-field">*</span>
+                        </label>
+                        <textarea class="form-control" id="content" name="content" rows="6" 
+                                  required onkeyup="updateCharCount('content', 1000)"></textarea>
+                        <div class="character-count" id="content-count">0 / 1000 حرف (مقترح)</div>
+                        <div class="help-text">اكتب محتوى الخبر بوضوح ودقة</div>
+                    </div>
+                </div>
+                
+                <!-- Status and Priority Section -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-cog"></i>
+                        الحالة والأولوية
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="status" class="form-label">حالة الخبر</label>
+                            <select class="form-select" id="status" name="status">
+                                {% for value, label in status_choices %}
+                                <option value="{{ value }}" {% if value == 'draft' %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="priority" class="form-label">أولوية الخبر</label>
+                            <select class="form-select" id="priority" name="priority" onchange="updatePriorityPreview()">
+                                {% for value, label in priority_choices %}
+                                <option value="{{ value }}" {% if value == 'normal' %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <div class="priority-preview priority-normal-preview" id="priority-preview">
+                                عادية
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Display Settings Section -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-eye"></i>
+                        إعدادات العرض
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="show_on_homepage" 
+                                       name="show_on_homepage" checked>
+                                <label class="form-check-label" for="show_on_homepage">
+                                    عرض في الصفحة الرئيسية
+                                </label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="show_on_ticker" 
+                                       name="show_on_ticker" checked>
+                                <label class="form-check-label" for="show_on_ticker">
+                                    عرض في الشريط الإخباري
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="ticker_speed" class="form-label">سرعة التمرير (بالثانية)</label>
+                            <input type="number" class="form-control" id="ticker_speed" name="ticker_speed" 
+                                   value="50" min="10" max="120">
+                            <div class="help-text">كلما قل الرقم، زادت سرعة التمرير</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SEO and Metadata Section -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-search"></i>
+                        تحسين محركات البحث والبيانات الوصفية
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="meta_description" class="form-label">وصف ميتا</label>
+                        <textarea class="form-control" id="meta_description" name="meta_description" 
+                                  rows="2" maxlength="160" onkeyup="updateCharCount('meta_description', 160)"></textarea>
+                        <div class="character-count" id="meta_description-count">0 / 160 حرف</div>
+                        <div class="help-text">وصف مختصر للخبر يظهر في نتائج البحث</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="tags" class="form-label">الكلمات المفتاحية</label>
+                        <input type="text" class="form-control" id="tags" name="tags" 
+                               placeholder="مثال: انتخابات، مجلس النواب، مصر">
+                        <div class="help-text">افصل بين الكلمات بفاصلة (،)</div>
+                    </div>
+                </div>
+                
+                <!-- Scheduling Section -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-calendar"></i>
+                        جدولة النشر (اختياري)
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="publish_date" class="form-label">تاريخ النشر</label>
+                            <input type="datetime-local" class="form-control" id="publish_date" name="publish_date">
+                            <div class="help-text">اتركه فارغاً للنشر الفوري</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="expire_date" class="form-label">تاريخ انتهاء الصلاحية</label>
+                            <input type="datetime-local" class="form-control" id="expire_date" name="expire_date">
+                            <div class="help-text">اتركه فارغاً لعدم انتهاء الصلاحية</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-submit me-3">
+                        <i class="fas fa-save me-2"></i>
+                        إنشاء الخبر
+                    </button>
+                    <a href="{% url 'core:news_management' %}" class="btn btn-cancel">
+                        <i class="fas fa-times me-2"></i>
+                        إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function updateCharCount(fieldId, maxLength) {
+    const field = document.getElementById(fieldId);
+    const counter = document.getElementById(fieldId + '-count');
+    const currentLength = field.value.length;
+    
+    counter.textContent = `${currentLength} / ${maxLength} حرف`;
+    
+    if (currentLength > maxLength * 0.9) {
+        counter.style.color = '#dc3545';
+    } else if (currentLength > maxLength * 0.7) {
+        counter.style.color = '#ffc107';
+    } else {
+        counter.style.color = '#666';
+    }
+}
+
+function updatePriorityPreview() {
+    const prioritySelect = document.getElementById('priority');
+    const preview = document.getElementById('priority-preview');
+    const selectedValue = prioritySelect.value;
+    const selectedText = prioritySelect.options[prioritySelect.selectedIndex].text;
+    
+    // Remove all priority classes
+    preview.className = 'priority-preview';
+    
+    // Add appropriate class
+    preview.classList.add(`priority-${selectedValue}-preview`);
+    preview.textContent = selectedText;
+}
+
+// Set current date and time as default for publish date
+document.addEventListener('DOMContentLoaded', function() {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    document.getElementById('publish_date').value = now.toISOString().slice(0, 16);
+});
+
+// Form validation
+document.querySelector('form').addEventListener('submit', function(e) {
+    const title = document.getElementById('title').value.trim();
+    const content = document.getElementById('content').value.trim();
+    
+    if (!title || !content) {
+        e.preventDefault();
+        alert('يرجى ملء جميع الحقول المطلوبة');
+        return;
+    }
+    
+    if (title.length < 10) {
+        e.preventDefault();
+        alert('عنوان الخبر يجب أن يكون 10 أحرف على الأقل');
+        return;
+    }
+    
+    if (content.length < 20) {
+        e.preventDefault();
+        alert('محتوى الخبر يجب أن يكون 20 حرف على الأقل');
+        return;
+    }
+});
+</script>
+{% endblock %}
+

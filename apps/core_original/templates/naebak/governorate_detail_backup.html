@@ -1,0 +1,478 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}محافظة {{ governorate.name }} - نائبك{% endblock %}
+
+{% block meta_description %}تعرف على مرشحي محافظة {{ governorate.name }} وشارك في التصويت والتقييم{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-banner">
+    <div class="container-fluid p-0">
+        <div class="banner-image">
+            {% if governorate.featured_image %}
+                <img src="{{ governorate.featured_image.url }}" alt="{{ governorate.name }}" class="img-fluid w-100" style="height: 500px; object-fit: cover; display: block;">
+            {% else %}
+                <img src="{% static 'naebak/images/sisi-banner.jpg' %}" alt="{{ governorate.name }}" class="img-fluid w-100" style="height: 500px; object-fit: cover; display: block;">
+            {% endif %}
+            <div class="banner-overlay">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8 text-center text-white">
+                            <h1 class="display-4 fw-bold mb-3">{{ governorate.name }}</h1>
+                            <p class="lead">تعرف على مرشحي محافظتك وشارك في التصويت</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- News Ticker -->
+<section class="news-ticker-section">
+    <div class="container-fluid">
+        <div class="news-ticker">
+            <div class="ticker-label">
+                <i class="fas fa-newspaper me-2"></i>آخر أخبار {{ governorate.name }}
+            </div>
+            <div class="ticker-content">
+                <div class="ticker-item">مرشحو {{ governorate.name }} يستعدون للانتخابات القادمة</div>
+                <div class="ticker-item">تطوير الخدمات الإلكترونية في محافظة {{ governorate.name }}</div>
+                <div class="ticker-item">إطلاق مبادرات جديدة لخدمة مواطني {{ governorate.name }}</div>
+                <div class="ticker-item">تحديث قوائم المرشحين في {{ governorate.name }}</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="section bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card text-center">
+                    <div class="stats-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stats-number text-primary">{{ featured_candidates.count }}</div>
+                    <div class="stats-label">مرشح مميز</div>
+                    <div class="stats-description">في محافظة {{ governorate.name }}</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card text-center">
+                    <div class="stats-icon">
+                        <i class="fas fa-vote-yea"></i>
+                    </div>
+                    <div class="stats-number text-primary">{{ featured_votes.count }}</div>
+                    <div class="stats-label">تصويت متميز</div>
+                    <div class="stats-description">جاري التصويت عليها</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card text-center">
+                    <div class="stats-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="stats-number text-primary">{{ all_candidates.count }}</div>
+                    <div class="stats-label">إجمالي المرشحين</div>
+                    <div class="stats-description">في جميع الدوائر</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card text-center">
+                    <div class="stats-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stats-number text-primary">4.5</div>
+                    <div class="stats-label">متوسط التقييم</div>
+                    <div class="stats-description">تقييم المواطنين</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Candidates Section -->
+{% if featured_candidates %}
+<section class="section bg-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="section-title text-primary">المرشحون المميزون في {{ governorate.name }}</h2>
+                <p class="lead text-muted">تعرف على أبرز المرشحين في محافظتك</p>
+            </div>
+        </div>
+        <div class="row">
+            {% for candidate in featured_candidates %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card shadow-lg border-0 rounded-4 h-100">
+                    <div class="card-header bg-white text-center py-3 border-0">
+                        <div class="candidate-image-container">
+                            {% if candidate.profile_image %}
+                                <img src="{{ candidate.profile_image.url }}" alt="{{ candidate.name }}" class="candidate-image rounded-circle">
+                            {% else %}
+                                {% if forloop.counter0|divisibleby:2 %}
+                                    <img src="{% static 'naebak/images/default_candidates/a1.jpg' %}" alt="{{ candidate.name }}" class="candidate-image rounded-circle">
+                                {% else %}
+                                    <img src="{% static 'naebak/images/default_candidates/a2.jpg' %}" alt="{{ candidate.name }}" class="candidate-image rounded-circle">
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                        <h5 class="mt-3 mb-1 text-dark">{{ candidate.name }}</h5>
+                        <p class="mb-0 text-muted">{{ candidate.role }}</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="candidate-details mb-3">
+                            <div class="detail-item mb-2">
+                                <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                                <span>{{ candidate.electoral_district }}</span>
+                            </div>
+                            {% if candidate.campaign_symbol %}
+                            <div class="detail-item mb-2">
+                                <i class="fas fa-flag text-primary me-2"></i>
+                                <span>رمز الترشح: <span class="badge bg-success">{{ candidate.campaign_symbol }}</span></span>
+                            </div>
+                            {% endif %}
+                            {% if candidate.election_number %}
+                            <div class="detail-item mb-2">
+                                <i class="fas fa-hashtag text-primary me-2"></i>
+                                <span>الرقم الانتخابي: <span class="badge bg-info">{{ candidate.election_number }}</span></span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="rating-section mb-3">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <span class="me-2">التقييم:</span>
+                                <div class="stars">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= candidate.average_rating|floatformat:0 %}
+                                            <i class="fas fa-star text-warning"></i>
+                                        {% else %}
+                                            <i class="far fa-star text-muted"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <span class="ms-2 text-muted">({{ candidate.average_rating|floatformat:1 }})</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 text-center pb-3">
+                        <a href="{% url 'naebak:candidate_detail' candidate.id %}" class="btn btn-primary btn-lg rounded-pill px-4">
+                            <i class="fas fa-eye me-2"></i>عرض الملف الشخصي
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Other Candidates Section -->
+{% if other_candidates %}
+<section class="section bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="candidates-list-container">
+                    <div class="list-group">
+                        {% for candidate in other_candidates %}
+                        <div class="list-group-item border-0 bg-white shadow-sm mb-3 rounded-3">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <div class="candidate-avatar-list">
+                                        {% if candidate.profile_image %}
+                                            <img src="{{ candidate.profile_image.url }}" alt="{{ candidate.name }}" class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover;">
+                                        {% else %}
+                                            {% if forloop.counter0|divisibleby:2 %}
+                                                <img src="{% static 'naebak/images/default_candidates/a1.jpg' %}" alt="{{ candidate.name }}" class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover;">
+                                            {% else %}
+                                                <img src="{% static 'naebak/images/default_candidates/a2.jpg' %}" alt="{{ candidate.name }}" class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover;">
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h6 class="fw-bold mb-1">{{ candidate.name }}</h6>
+                                            <p class="text-muted small mb-0">{{ candidate.role }}</p>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <p class="text-muted small mb-1"><i class="fas fa-map-marker-alt text-primary me-1"></i>{{ candidate.constituency }}</p>
+                                            {% if candidate.election_symbol %}
+                                            <p class="text-muted small mb-0"><i class="fas fa-flag text-primary me-1"></i>{{ candidate.election_symbol }}</p>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-2">
+                                            {% if candidate.election_number %}
+                                            <span class="badge bg-info text-white">{{ candidate.election_number }}</span>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="rating-section text-center">
+                                                <div class="d-flex align-items-center justify-content-center mb-1">
+                                                    {% for i in "12345" %}
+                                                        {% if forloop.counter <= candidate.average_rating|floatformat:0 %}
+                                                            <i class="fas fa-star text-warning small"></i>
+                                                        {% else %}
+                                                            <i class="far fa-star text-muted small"></i>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                <small class="text-muted">({{ candidate.average_rating|floatformat:1 }})</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <a href="{% url 'naebak:candidate_detail' candidate.id %}" class="btn btn-outline-primary btn-sm rounded-pill">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-12 text-center mt-4">
+                <a href="{% url 'naebak:governorate_candidates_list' governorate.slug %}" class="btn btn-success btn-lg rounded-pill px-5">
+                    <i class="fas fa-list me-2"></i>عرض جميع مرشحي {{ governorate.name }}
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Featured Votes Section -->
+{% if featured_votes %}
+<section class="section bg-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="section-title text-primary">التصويتات المتميزة في {{ governorate.name }}</h2>
+                <p class="lead text-muted">شارك في التصويت على القضايا المهمة</p>
+            </div>
+        </div>
+        <div class="row">
+            {% for vote in featured_votes %}
+            <div class="col-lg-6 col-md-6 mb-4">
+                <div class="card shadow-lg border-0 rounded-4 h-100">
+                    {% if vote.image %}
+                    <div class="card-img-top-container">
+                        <img src="{{ vote.image.url }}" alt="{{ vote.title }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">{{ vote.title }}</h5>
+                        <p class="card-text text-muted">{{ vote.description|truncatewords:20 }}</p>
+                        <div class="candidate-info mb-3">
+                            <div class="d-flex align-items-center">
+                                {% if vote.candidate.profile_image %}
+                                    <img src="{{ vote.candidate.profile_image.url }}" alt="{{ vote.candidate.name }}" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                                {% else %}
+                                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
+                                        <i class="fas fa-user text-muted"></i>
+                                    </div>
+                                {% endif %}
+                                <div>
+                                    <h6 class="mb-0">{{ vote.candidate.name }}</h6>
+                                    <small class="text-muted">{{ vote.candidate.electoral_district }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="voting-section">
+                            <div class="row">
+                                <div class="col-6">
+                                    <button class="btn btn-success w-100 rounded-pill vote-btn" data-vote="yes" data-vote-id="{{ vote.id }}">
+                                        <i class="fas fa-thumbs-up me-2"></i>نعم
+                                        <span class="badge bg-light text-success ms-2">{{ vote.yes_votes }}</span>
+                                    </button>
+                                </div>
+                                <div class="col-6">
+                                    <button class="btn btn-danger w-100 rounded-pill vote-btn" data-vote="no" data-vote-id="{{ vote.id }}">
+                                        <i class="fas fa-thumbs-down me-2"></i>لا
+                                        <span class="badge bg-light text-danger ms-2">{{ vote.no_votes }}</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="progress mt-3" style="height: 8px;">
+                                {% with total_votes=vote.yes_votes|add:vote.no_votes %}
+                                    {% if total_votes > 0 %}
+                                        {% widthratio vote.yes_votes total_votes 100 as yes_percentage %}
+                                        <div class="progress-bar bg-success" style="width: {{ yes_percentage }}%"></div>
+                                    {% else %}
+                                        <div class="progress-bar bg-success" style="width: 50%"></div>
+                                    {% endif %}
+                                {% endwith %}
+                            </div>
+                            <div class="text-center mt-2">
+                                <small class="text-muted">إجمالي الأصوات: {{ vote.yes_votes|add:vote.no_votes }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Quick Actions Section -->
+<section class="section bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="section-title text-primary">ماذا يمكنك فعله في {{ governorate.name }}؟</h2>
+                <p class="lead text-muted">تفاعل مع مرشحي محافظتك</p>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="row g-4">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="feature-card text-center p-4 h-100 border rounded-4 bg-white shadow-sm">
+                            <i class="fas fa-vote-yea text-primary fs-1 mb-3"></i>
+                            <h6 class="fw-bold text-dark">التصويت</h6>
+                            <p class="small text-muted mb-0">صوت على القضايا المهمة</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="feature-card text-center p-4 h-100 border rounded-4 bg-white shadow-sm">
+                            <i class="fas fa-star text-warning fs-1 mb-3"></i>
+                            <h6 class="fw-bold text-dark">تقييم المرشحين</h6>
+                            <p class="small text-muted mb-0">قيم أداء مرشحي محافظتك</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="feature-card text-center p-4 h-100 border rounded-4 bg-white shadow-sm">
+                            <i class="fas fa-bullhorn text-info fs-1 mb-3"></i>
+                            <h6 class="fw-bold text-dark">دعم بلافتة</h6>
+                            <p class="small text-muted mb-0">ادعم مرشحك المفضل</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="feature-card text-center p-4 h-100 border rounded-4 bg-white shadow-sm">
+                            <i class="fas fa-comments text-success fs-1 mb-3"></i>
+                            <h6 class="fw-bold text-dark">محادثة مباشرة</h6>
+                            <p class="small text-muted mb-0">تواصل مع المرشحين</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.banner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.candidate-image-container {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 1.5rem;
+    border: none; /* Removed the green border */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.candidate-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.vote-btn {
+    transition: all 0.3s ease;
+}
+
+.vote-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.news-ticker-section {
+    background-color: var(--primary-dark);
+    color: white;
+    padding: 0.75rem 0;
+    overflow: hidden;
+}
+
+.news-ticker {
+    display: flex;
+    align-items: center;
+}
+
+.ticker-label {
+    background-color: var(--accent-color);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    white-space: nowrap;
+    margin-left: 1rem;
+}
+
+.ticker-content {
+    flex-grow: 1;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.ticker-item {
+    display: inline-block;
+    padding: 0 1rem;
+    animation: ticker-scroll 20s linear infinite;
+}
+
+@keyframes ticker-scroll {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+.candidate-avatar-list {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none; /* Removed the green border from here */
+}
+
+.candidate-avatar-list img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+</style>
+{% endblock %}
+

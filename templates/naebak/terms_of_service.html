@@ -1,0 +1,547 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}شروط الاستخدام - نائبك دوت كوم{% endblock %}
+
+{% block meta_description %}شروط وأحكام استخدام موقع نائبك دوت كوم - القواعد والالتزامات{% endblock %}
+
+{% block extra_css %}
+<style>
+    .terms-container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        padding: 40px;
+        margin: 30px 0;
+    }
+    
+    .terms-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: white;
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .terms-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    
+    .terms-subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+    }
+    
+    .section-title {
+        color: var(--primary-color);
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 30px 0 15px 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--primary-color);
+    }
+    
+    .section-content {
+        line-height: 1.8;
+        margin-bottom: 25px;
+        color: #333;
+    }
+    
+    .highlight-box {
+        background: #f8f9fa;
+        border-right: 4px solid var(--primary-color);
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 8px;
+    }
+    
+    .warning-box {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 15px 0;
+        border-right: 4px solid #f39c12;
+    }
+    
+    .danger-box {
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 15px 0;
+        border-right: 4px solid #dc3545;
+    }
+    
+    .success-box {
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 15px 0;
+        border-right: 4px solid #28a745;
+    }
+    
+    .contact-info {
+        background: var(--primary-color);
+        color: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin: 30px 0;
+        text-align: center;
+    }
+    
+    .last-updated {
+        text-align: center;
+        color: #666;
+        font-style: italic;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+    }
+    
+    .rules-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+    }
+    
+    .rule-card {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        border-top: 4px solid var(--primary-color);
+    }
+    
+    .rule-icon {
+        font-size: 2rem;
+        color: var(--primary-color);
+        margin-bottom: 10px;
+    }
+    
+    .prohibited-list {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .prohibited-list li {
+        background: #f8d7da;
+        margin: 10px 0;
+        padding: 15px;
+        border-radius: 8px;
+        border-right: 4px solid #dc3545;
+    }
+    
+    .prohibited-list li i {
+        color: #dc3545;
+        margin-left: 10px;
+    }
+    
+    .allowed-list {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .allowed-list li {
+        background: #d4edda;
+        margin: 10px 0;
+        padding: 15px;
+        border-radius: 8px;
+        border-right: 4px solid #28a745;
+    }
+    
+    .allowed-list li i {
+        color: #28a745;
+        margin-left: 10px;
+    }
+    
+    .penalty-levels {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+    }
+    
+    .penalty-card {
+        text-align: center;
+        padding: 20px;
+        border-radius: 10px;
+        color: white;
+    }
+    
+    .penalty-warning {
+        background: #f39c12;
+    }
+    
+    .penalty-suspension {
+        background: #e74c3c;
+    }
+    
+    .penalty-ban {
+        background: #8e44ad;
+    }
+    
+    .penalty-legal {
+        background: #2c3e50;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="terms-header">
+        <h1 class="terms-title">شروط الاستخدام</h1>
+        <p class="terms-subtitle">القواعد والالتزامات لاستخدام موقع نائبك دوت كوم</p>
+    </div>
+    
+    <div class="terms-container">
+        <div class="warning-box">
+            <strong>تنبيه مهم:</strong> يرجى قراءة شروط الاستخدام هذه بعناية قبل استخدام موقع نائبك دوت كوم. استخدامك للموقع يعني موافقتك الكاملة على هذه الشروط والالتزام بها.
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-handshake me-2"></i>
+            الموافقة على الشروط
+        </h2>
+        <div class="section-content">
+            <p>بدخولك واستخدامك لموقع "نائبك دوت كوم"، فإنك توافق على الالتزام بشروط الاستخدام هذه وجميع القوانين واللوائح المعمول بها. إذا كنت لا توافق على أي من هذه الشروط، يُرجى عدم استخدام الموقع.</p>
+            
+            <div class="success-box">
+                <strong>التزامنا:</strong> نحن ملتزمون بتوفير منصة آمنة وشفافة للتواصل بين المواطنين والمرشحين، مع احترام جميع القوانين المصرية ذات الصلة.
+            </div>
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-info-circle me-2"></i>
+            تعريف الخدمة
+        </h2>
+        <div class="section-content">
+            <p>موقع "نائبك دوت كوم" هو منصة إلكترونية تهدف إلى:</p>
+            
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <div class="rule-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h5>ربط المواطنين بالمرشحين</h5>
+                    <p>توفير وسيلة مباشرة للتواصل بين المواطنين ومرشحي مجلس النواب</p>
+                </div>
+                
+                <div class="rule-card">
+                    <div class="rule-icon">
+                        <i class="fas fa-vote-yea"></i>
+                    </div>
+                    <h5>تعزيز المشاركة السياسية</h5>
+                    <p>تشجيع المواطنين على المشاركة في العملية الديمقراطية</p>
+                </div>
+                
+                <div class="rule-card">
+                    <div class="rule-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <h5>الشفافية والمساءلة</h5>
+                    <p>توفير معلومات شفافة عن المرشحين وبرامجهم الانتخابية</p>
+                </div>
+                
+                <div class="rule-card">
+                    <div class="rule-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h5>الحوار البناء</h5>
+                    <p>تسهيل الحوار البناء والمثمر بين جميع الأطراف</p>
+                </div>
+            </div>
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-user-plus me-2"></i>
+            التسجيل والحسابات
+        </h2>
+        <div class="section-content">
+            <h4>شروط التسجيل:</h4>
+            <ul class="allowed-list">
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <strong>السن القانوني:</strong> يجب أن تكون 18 عاماً أو أكثر
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <strong>الجنسية:</strong> مواطن مصري أو مقيم قانوني في مصر
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <strong>المعلومات الصحيحة:</strong> تقديم معلومات دقيقة وحقيقية
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <strong>حساب واحد:</strong> حساب واحد فقط لكل شخص
+                </li>
+            </ul>
+            
+            <h4>مسؤوليات المستخدم:</h4>
+            <div class="highlight-box">
+                <ul>
+                    <li>الحفاظ على سرية كلمة المرور</li>
+                    <li>إبلاغنا فوراً عن أي استخدام غير مصرح به لحسابك</li>
+                    <li>تحديث معلوماتك الشخصية عند الحاجة</li>
+                    <li>عدم مشاركة حسابك مع أشخاص آخرين</li>
+                </ul>
+            </div>
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-gavel me-2"></i>
+            قواعد السلوك
+        </h2>
+        <div class="section-content">
+            <h4>السلوكيات المسموحة:</h4>
+            <ul class="allowed-list">
+                <li>
+                    <i class="fas fa-thumbs-up"></i>
+                    <strong>الحوار المهذب:</strong> التواصل بأدب واحترام مع جميع المستخدمين
+                </li>
+                <li>
+                    <i class="fas fa-thumbs-up"></i>
+                    <strong>المشاركة البناءة:</strong> تقديم آراء ومقترحات بناءة ومفيدة
+                </li>
+                <li>
+                    <i class="fas fa-thumbs-up"></i>
+                    <strong>الأسئلة المشروعة:</strong> طرح أسئلة حول البرامج الانتخابية والسياسات
+                </li>
+                <li>
+                    <i class="fas fa-thumbs-up"></i>
+                    <strong>التقييم العادل:</strong> تقييم المرشحين بناءً على برامجهم وأدائهم
+                </li>
+            </ul>
+            
+            <h4>السلوكيات المحظورة:</h4>
+            <ul class="prohibited-list">
+                <li>
+                    <i class="fas fa-ban"></i>
+                    <strong>التحريض والكراهية:</strong> نشر محتوى يحرض على العنف أو الكراهية
+                </li>
+                <li>
+                    <i class="fas fa-ban"></i>
+                    <strong>الإساءة الشخصية:</strong> السب أو القذف أو التشهير بأي شخص
+                </li>
+                <li>
+                    <i class="fas fa-ban"></i>
+                    <strong>المعلومات المضللة:</strong> نشر أخبار كاذبة أو معلومات مضللة
+                </li>
+                <li>
+                    <i class="fas fa-ban"></i>
+                    <strong>الإزعاج (Spam):</strong> إرسال رسائل مكررة أو غير مرغوب فيها
+                </li>
+                <li>
+                    <i class="fas fa-ban"></i>
+                    <strong>انتحال الشخصية:</strong> التظاهر بأنك شخص آخر أو مؤسسة
+                </li>
+                <li>
+                    <i class="fas fa-ban"></i>
+                    <strong>المحتوى غير اللائق:</strong> نشر محتوى إباحي أو عنيف أو مسيء
+                </li>
+                <li>
+                    <i class="fas fa-ban"></i>
+                    <strong>التلاعب:</strong> محاولة التلاعب في نتائج التصويت أو التقييمات
+                </li>
+                <li>
+                    <i class="fas fa-ban"></i>
+                    <strong>الأنشطة غير القانونية:</strong> أي نشاط يخالف القوانين المصرية
+                </li>
+            </ul>
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            العقوبات والمخالفات
+        </h2>
+        <div class="section-content">
+            <p>في حالة مخالفة شروط الاستخدام، قد نتخذ الإجراءات التالية:</p>
+            
+            <div class="penalty-levels">
+                <div class="penalty-card penalty-warning">
+                    <h5>تحذير</h5>
+                    <p>إنذار أول للمخالفات البسيطة</p>
+                </div>
+                
+                <div class="penalty-card penalty-suspension">
+                    <h5>إيقاف مؤقت</h5>
+                    <p>من 24 ساعة إلى 30 يوم</p>
+                </div>
+                
+                <div class="penalty-card penalty-ban">
+                    <h5>إيقاف دائم</h5>
+                    <p>حظر نهائي من الموقع</p>
+                </div>
+                
+                <div class="penalty-card penalty-legal">
+                    <h5>إجراء قانوني</h5>
+                    <p>إبلاغ السلطات المختصة</p>
+                </div>
+            </div>
+            
+            <div class="danger-box">
+                <strong>تنبيه:</strong> المخالفات الجسيمة مثل التحريض على العنف أو نشر معلومات كاذبة قد تؤدي إلى إيقاف فوري وإبلاغ السلطات المختصة.
+            </div>
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-copyright me-2"></i>
+            الملكية الفكرية
+        </h2>
+        <div class="section-content">
+            <h4>حقوق الموقع:</h4>
+            <div class="highlight-box">
+                <p>جميع المحتويات الموجودة على الموقع، بما في ذلك النصوص والصور والتصميمات والشعارات، محمية بحقوق الطبع والنشر وحقوق الملكية الفكرية.</p>
+            </div>
+            
+            <h4>المحتوى المقدم من المستخدمين:</h4>
+            <ul>
+                <li>تحتفظ بحقوق الملكية الفكرية للمحتوى الذي تنشره</li>
+                <li>تمنحنا ترخيصاً لاستخدام وعرض المحتوى على الموقع</li>
+                <li>تضمن أن المحتوى لا يخالف حقوق الآخرين</li>
+                <li>نحتفظ بالحق في إزالة أي محتوى مخالف</li>
+            </ul>
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-shield-alt me-2"></i>
+            إخلاء المسؤولية
+        </h2>
+        <div class="section-content">
+            <div class="warning-box">
+                <h5>المسؤوليات المحدودة:</h5>
+                <ul>
+                    <li><strong>المحتوى:</strong> لا نتحمل مسؤولية دقة المحتوى المقدم من المستخدمين</li>
+                    <li><strong>القرارات:</strong> لا نتحمل مسؤولية قرارات التصويت أو الاختيارات السياسية</li>
+                    <li><strong>الأضرار:</strong> لا نتحمل مسؤولية أي أضرار مباشرة أو غير مباشرة</li>
+                    <li><strong>الخدمات الخارجية:</strong> لا نتحمل مسؤولية خدمات الأطراف الثالثة</li>
+                </ul>
+            </div>
+            
+            <h4>التزاماتنا:</h4>
+            <div class="success-box">
+                <ul>
+                    <li>توفير منصة آمنة ومستقرة قدر الإمكان</li>
+                    <li>حماية بياناتك الشخصية وفقاً لسياسة الخصوصية</li>
+                    <li>الاستجابة للشكاوى والمشاكل التقنية</li>
+                    <li>تطبيق قواعد الموقع بعدالة وشفافية</li>
+                </ul>
+            </div>
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-ban me-2"></i>
+            إنهاء الخدمة
+        </h2>
+        <div class="section-content">
+            <h4>حقك في إنهاء الحساب:</h4>
+            <p>يمكنك إنهاء حسابك في أي وقت من خلال إعدادات الحساب أو التواصل معنا. سنقوم بحذف بياناتك وفقاً لسياسة الخصوصية.</p>
+            
+            <h4>حقنا في إنهاء الخدمة:</h4>
+            <div class="highlight-box">
+                <p>نحتفظ بالحق في إيقاف أو إنهاء حسابك أو وصولك للموقع في الحالات التالية:</p>
+                <ul>
+                    <li>مخالفة شروط الاستخدام</li>
+                    <li>استخدام الموقع لأنشطة غير قانونية</li>
+                    <li>الإضرار بالموقع أو المستخدمين الآخرين</li>
+                    <li>عدم النشاط لفترة طويلة (أكثر من سنتين)</li>
+                </ul>
+            </div>
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-balance-scale me-2"></i>
+            القانون المعمول به
+        </h2>
+        <div class="section-content">
+            <div class="highlight-box">
+                <p><strong>القانون المصري:</strong> تخضع شروط الاستخدام هذه للقوانين المصرية، وتختص المحاكم المصرية بالنظر في أي نزاعات قد تنشأ.</p>
+            </div>
+            
+            <h4>حل النزاعات:</h4>
+            <ol>
+                <li><strong>التواصل المباشر:</strong> محاولة حل النزاع بالتواصل المباشر معنا</li>
+                <li><strong>الوساطة:</strong> اللجوء للوساطة إذا لم يتم حل النزاع</li>
+                <li><strong>التحكيم:</strong> التحكيم وفقاً لقوانين التحكيم المصرية</li>
+                <li><strong>المحاكم:</strong> اللجوء للمحاكم المصرية كحل أخير</li>
+            </ol>
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-sync-alt me-2"></i>
+            تعديل الشروط
+        </h2>
+        <div class="section-content">
+            <p>نحتفظ بالحق في تعديل شروط الاستخدام هذه في أي وقت. التعديلات الجوهرية ستكون مصحوبة بإشعار مسبق.</p>
+            
+            <div class="warning-box">
+                <strong>إشعار التحديثات:</strong> سنقوم بإشعارك بأي تغييرات جوهرية عبر:
+                <ul>
+                    <li>البريد الإلكتروني المسجل في حسابك</li>
+                    <li>إشعار بارز على الصفحة الرئيسية للموقع</li>
+                    <li>رسالة عند تسجيل الدخول التالي</li>
+                </ul>
+            </div>
+            
+            <p>استمرارك في استخدام الموقع بعد نشر التعديلات يعني موافقتك على الشروط الجديدة.</p>
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-question-circle me-2"></i>
+            الأسئلة الشائعة
+        </h2>
+        <div class="section-content">
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <h6>هل الموقع مجاني؟</h6>
+                    <p>نعم، جميع خدمات الموقع مجانية للمواطنين والمرشحين.</p>
+                </div>
+                
+                <div class="rule-card">
+                    <h6>هل يمكنني حذف حسابي؟</h6>
+                    <p>نعم، يمكنك حذف حسابك في أي وقت من إعدادات الحساب.</p>
+                </div>
+                
+                <div class="rule-card">
+                    <h6>كيف أبلغ عن مخالفة؟</h6>
+                    <p>استخدم زر "الإبلاغ" أو تواصل معنا مباشرة.</p>
+                </div>
+                
+                <div class="rule-card">
+                    <h6>هل بياناتي آمنة؟</h6>
+                    <p>نعم، نتبع أعلى معايير الأمان لحماية بياناتك.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="contact-info">
+            <h3>
+                <i class="fas fa-envelope me-2"></i>
+                تواصل معنا
+            </h3>
+            <p>إذا كان لديك أي أسئلة حول شروط الاستخدام، يرجى التواصل معنا:</p>
+            
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <p><i class="fas fa-envelope me-2"></i> legal@naebak.com</p>
+                    <p><i class="fas fa-phone me-2"></i> +20 2 1234 5678</p>
+                </div>
+                <div class="col-md-6">
+                    <p><i class="fas fa-map-marker-alt me-2"></i> القاهرة، جمهورية مصر العربية</p>
+                    <p><i class="fas fa-clock me-2"></i> الأحد - الخميس: 9 صباحاً - 6 مساءً</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="last-updated">
+            آخر تحديث: {{ last_updated|date:"d F Y" }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

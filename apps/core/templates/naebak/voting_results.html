@@ -1,0 +1,313 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نتائج التصويت - نائبك دوت كوم</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Tajawal', sans-serif;
+            direction: rtl;
+            text-align: right;
+        }
+        
+        .sidebar {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 250px;
+            z-index: 1000;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar .logo {
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .sidebar .logo img {
+            max-width: 150px;
+            height: auto;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.9);
+            padding: 1rem 1.5rem;
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateX(-5px);
+        }
+        
+        .main-content {
+            margin-right: 250px;
+            padding: 2rem;
+        }
+        
+        .page-header {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .page-header h1 {
+            color: #4CAF50;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .content-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .vote-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 2rem;
+        }
+        
+        .vote-stat-item {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 10px;
+            flex: 1;
+            margin: 0 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .vote-stat-item.approve {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            color: white;
+        }
+        
+        .vote-stat-item.disapprove {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: white;
+        }
+        
+        .vote-stat-item h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .vote-stat-item p {
+            font-size: 1.1rem;
+            margin-bottom: 0;
+        }
+        
+        .progress-section {
+            margin-top: 2rem;
+        }
+        
+        .progress-bar-container {
+            height: 30px;
+            background-color: #e9ecef;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        
+        .progress-bar-approve {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50 0%, #388E3C 100%);
+            text-align: center;
+            color: white;
+            font-weight: 700;
+            line-height: 30px;
+            transition: width 0.5s ease-in-out;
+        }
+        
+        .progress-bar-disapprove {
+            height: 100%;
+            background: linear-gradient(90deg, #f44336 0%, #d32f2f 100%);
+            text-align: center;
+            color: white;
+            font-weight: 700;
+            line-height: 30px;
+            transition: width 0.5s ease-in-out;
+        }
+        
+        .vote-distribution-chart {
+            width: 100%;
+            height: 400px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #6c757d;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="{% static 'naebak/images/logo-naebak-white.png' %}" alt="نائبك دوت كوم">
+        </div>
+        <nav class="nav flex-column">
+            <a class="nav-link" href="{% url 'naebak:candidate_dashboard' %}">
+                <i class="fas fa-tachometer-alt me-2"></i>لوحة التحكم
+            </a>
+            <a class="nav-link" href="{% url 'naebak:profile_management' %}">
+                <i class="fas fa-user-edit me-2"></i>إدارة الملف الشخصي
+            </a>
+            <a class="nav-link" href="{% url 'naebak:electoral_program_management' %}">
+                <i class="fas fa-list-check me-2"></i>البرنامج الانتخابي
+            </a>
+            <a class="nav-link" href="{% url 'naebak:service_history_management' %}">
+                <i class="fas fa-history me-2"></i>تاريخ العمل العام
+            </a>
+            <a class="nav-link" href="{% url 'naebak:messages_management' %}">
+                <i class="fas fa-envelope me-2"></i>الرسائل
+            </a>
+            <a class="nav-link" href="{% url 'naebak:ratings_management' %}">
+                <i class="fas fa-star me-2"></i>التقييمات
+            </a>
+            <a class="nav-link active" href="{% url 'naebak:voting_results' %}">
+                <i class="fas fa-chart-bar me-2"></i>نتائج التصويت
+            </a>
+            <hr class="my-3" style="border-color: rgba(255,255,255,0.2);">
+            <a class="nav-link" href="{% url 'naebak:candidate_logout' %}">
+                <i class="fas fa-sign-out-alt me-2"></i>تسجيل الخروج
+            </a>
+        </nav>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1><i class="fas fa-chart-bar me-3"></i>نتائج التصويت</h1>
+            <p class="text-muted mb-0">مراقبة نتائج التصويت بنعم أو لا</p>
+        </div>
+        
+        <!-- Voting Statistics -->
+        <div class="content-card">
+            <h3 class="mb-4"><i class="fas fa-poll me-2"></i>إحصائيات التصويت</h3>
+            
+            {% if total_votes > 0 %}
+                <div class="vote-stats">
+                    <div class="vote-stat-item approve">
+                        <h3>{{ approve_votes|default:0 }}</h3>
+                        <p>صوت بنعم</p>
+                    </div>
+                    <div class="vote-stat-item disapprove">
+                        <h3>{{ disapprove_votes|default:0 }}</h3>
+                        <p>صوت بلا</p>
+                    </div>
+                </div>
+                
+                <div class="progress-section">
+                    <h4 class="mb-3">نسبة التصويت</h4>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-approve" style="width: {{ approve_percentage|default:0 }}%;">
+                            {% if approve_percentage > 0 %}{{ approve_percentage|floatformat:1 }}% نعم{% endif %}
+                        </div>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-disapprove" style="width: {{ disapprove_percentage|default:0 }}%;">
+                            {% if disapprove_percentage > 0 %}{{ disapprove_percentage|floatformat:1 }}% لا{% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <hr class="my-4">
+                
+                <h4 class="mb-3">توزيع التصويت</h4>
+                <canvas id="voteDistributionChart" class="vote-distribution-chart"></canvas>
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-vote-yea"></i>
+                    <h4>لا توجد بيانات تصويت</h4>
+                    <p>لم يتم تسجيل أي أصوات بعد.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <script>
+        {% if total_votes > 0 %}
+        const ctx = document.getElementById('voteDistributionChart').getContext('2d');
+        const voteDistributionChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['نعم', 'لا'],
+                datasets: [{
+                    data: [{{ approve_votes|default:0 }}, {{ disapprove_votes|default:0 }}],
+                    backgroundColor: [
+                        '#4CAF50',
+                        '#f44336'
+                    ],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                family: 'Tajawal'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    label += context.parsed + ' صوت (' + context.dataset.data[context.dataIndex] / {{ total_votes }} * 100).toFixed(1) + '%)';
+                                }
+                                return label;
+                            }
+                        },
+                        titleFont: {
+                            family: 'Tajawal'
+                        },
+                        bodyFont: {
+                            family: 'Tajawal'
+                        }
+                    }
+                }
+            }
+        });
+        {% endif %}
+    </script>
+</body>
+</html>
+

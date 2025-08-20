@@ -1,0 +1,429 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}المحافظات - نائبك دوت كوم{% endblock %}
+
+{% block meta_description %}تصفح جميع محافظات مصر واكتشف المرشحين في كل محافظة{% endblock %}
+
+{% block content %}
+<!-- News Ticker Section -->
+<section class="news-ticker-section">
+    <div class="container-fluid">
+        <div class="news-ticker">
+            <div class="ticker-label">آخر الأخبار</div>
+            <div class="ticker-content">
+                <div class="ticker-item">إطلاق منصة نائبك دوت كوم الجديدة للتواصل مع المرشحين والمواطنين</div>
+                <div class="ticker-item">تطوير المنصة الإلكترونية لتوفير أفضل تجربة للمستخدمين</div>
+                <div class="ticker-item">إضافة ميزات جديدة للمنصة لتحسين التفاعل بين المرشحين والمواطنين</div>
+                <div class="ticker-item">انطلاق حملة التسجيل للمواطنين في جميع محافظات مصر</div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Page Header -->
+<section class="hero" style="padding: 2rem 0;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="animate-fade-in-right">محافظات مصر</h1>
+                <p class="lead animate-fade-in-right">اكتشف المرشحين والأخبار في جميع محافظات جمهورية مصر العربية</p>
+            </div>
+            <div class="col-lg-4 text-center">
+                <i class="fas fa-map-marked-alt text-white" style="font-size: 6rem; opacity: 0.3;"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Search and Filter Section -->
+<section class="section bg-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <form method="GET" class="row g-3">
+                            <div class="col-md-8">
+                                <div class="position-relative">
+                                    <input type="text" 
+                                           class="form-control search-input" 
+                                           name="search" 
+                                           value="{{ request.GET.search }}"
+                                           placeholder="ابحث عن محافظة..."
+                                           data-search-type="governorates">
+                                    <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                                    <div class="search-results position-absolute w-100 bg-white border rounded shadow-sm" style="display: none; z-index: 1000; top: 100%;"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-search me-2"></i>بحث
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Governorates Grid -->
+<section class="section">
+    <div class="container">
+        <div class="row">
+            {% for governorate in governorates_with_stats %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <a href="{% url 'naebak:governorate_detail' governorate.governorate.slug %}" class="governorate-card">
+                    <div class="content">
+                        <h3>{{ governorate.governorate.name_ar }}</h3>
+                        <p>{{ governorate.total_candidates|default:"0" }} مرشح • {{ governorate.governorate.population|default:"0" }} مواطن</p>
+                        <div class="mt-3">
+                            <span class="badge bg-light text-dark me-2">
+                                <i class="fas fa-users me-1"></i>{{ governorate.total_candidates|default:"0" }}
+                            </span>
+                            <span class="badge bg-light text-dark">
+                                <i class="fas fa-user-friends me-1"></i>{{ governorate.governorate.population|default:"0" }}
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% empty %}
+            <!-- Default governorates if none in database -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <a href="{% url 'naebak:governorate_detail' governorate.governorate.slug %}" class="governorate-card">
+                    <div class="content">
+                        <h3>{{ governorate.governorate.name_ar }}</h3>
+                        <p>{{ governorate.total_candidates|default:"0" }} مرشح • {{ governorate.governorate.population|default:"0" }} مواطن</p>
+                        <div class="mt-3">
+                            <span class="badge bg-light text-dark me-2">
+                                <i class="fas fa-users me-1"></i>{{ governorate.total_candidates|default:"0" }}
+                            </span>
+                            <span class="badge bg-light text-dark">
+                                <i class="fas fa-user-friends me-1"></i>{{ governorate.governorate.population|default:"0" }}
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <a href="{% url 'naebak:governorate_detail' governorate.governorate.slug %}" class="governorate-card">
+                    <div class="content">
+                        <h3>الجيزة</h3>
+                        <p>120 مرشح • 12,000 مواطن</p>
+                        <div class="mt-3">
+                            <span class="badge bg-light text-dark me-2">
+                                <i class="fas fa-users me-1"></i>120
+                            </span>
+                            <span class="badge bg-light text-dark">
+                                <i class="fas fa-user-friends me-1"></i>12,000
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <a href="{% url 'naebak:governorate_detail' governorate.governorate.slug %}" class="governorate-card">
+                    <div class="content">
+                        <h3>الإسكندرية</h3>
+                        <p>100 مرشح • 10,000 مواطن</p>
+                        <div class="mt-3">
+                            <span class="badge bg-light text-dark me-2">
+                                <i class="fas fa-users me-1"></i>100
+                            </span>
+                            <span class="badge bg-light text-dark">
+                                <i class="fas fa-user-friends me-1"></i>10,000
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <a href="{% url 'naebak:governorate_detail' governorate.governorate.slug %}" class="governorate-card">
+                    <div class="content">
+                        <h3>الشرقية</h3>
+                        <p>85 مرشح • 8,500 مواطن</p>
+                        <div class="mt-3">
+                            <span class="badge bg-light text-dark me-2">
+                                <i class="fas fa-users me-1"></i>85
+                            </span>
+                            <span class="badge bg-light text-dark">
+                                <i class="fas fa-user-friends me-1"></i>8,500
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <a href="{% url 'naebak:governorate_detail' governorate.governorate.slug %}" class="governorate-card">
+                    <div class="content">
+                        <h3>المنوفية</h3>
+                        <p>70 مرشح • 7,000 مواطن</p>
+                        <div class="mt-3">
+                            <span class="badge bg-light text-dark me-2">
+                                <i class="fas fa-users me-1"></i>70
+                            </span>
+                            <span class="badge bg-light text-dark">
+                                <i class="fas fa-user-friends me-1"></i>7,000
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <a href="{% url 'naebak:governorate_detail' governorate.governorate.slug %}" class="governorate-card">
+                    <div class="content">
+                        <h3>الدقهلية</h3>
+                        <p>90 مرشح • 9,000 مواطن</p>
+                        <div class="mt-3">
+                            <span class="badge bg-light text-dark me-2">
+                                <i class="fas fa-users me-1"></i>90
+                            </span>
+                            <span class="badge bg-light text-dark">
+                                <i class="fas fa-user-friends me-1"></i>9,000
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <a href="{% url 'naebak:governorate_detail' governorate.governorate.slug %}" class="governorate-card">
+                    <div class="content">
+                        <h3>البحيرة</h3>
+                        <p>75 مرشح • 7,500 مواطن</p>
+                        <div class="mt-3">
+                            <span class="badge bg-light text-dark me-2">
+                                <i class="fas fa-users me-1"></i>75
+                            </span>
+                            <span class="badge bg-light text-dark">
+                                <i class="fas fa-user-friends me-1"></i>7,500
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <a href="{% url 'naebak:governorate_detail' governorate.governorate.slug %}" class="governorate-card">
+                    <div class="content">
+                        <h3>كفر الشيخ</h3>
+                        <p>60 مرشح • 6,000 مواطن</p>
+                        <div class="mt-3">
+                            <span class="badge bg-light text-dark me-2">
+                                <i class="fas fa-users me-1"></i>60
+                            </span>
+                            <span class="badge bg-light text-dark">
+                                <i class="fas fa-user-friends me-1"></i>6,000
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <a href="{% url 'naebak:governorate_detail' governorate.governorate.slug %}" class="governorate-card">
+                    <div class="content">
+                        <h3>الغربية</h3>
+                        <p>80 مرشح • 8,000 مواطن</p>
+                        <div class="mt-3">
+                            <span class="badge bg-light text-dark me-2">
+                                <i class="fas fa-users me-1"></i>80
+                            </span>
+                            <span class="badge bg-light text-dark">
+                                <i class="fas fa-user-friends me-1"></i>8,000
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="صفحات المحافظات">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                                    <i class="fas fa-angle-double-right"></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                                    <i class="fas fa-angle-right"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                        
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                            {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                                    <i class="fas fa-angle-left"></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                                    <i class="fas fa-angle-double-left"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="section bg-light">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card">
+                    <div class="stats-icon">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <div class="stats-number" data-target="{{ total_governorates|default:
+'27' }}">0</div>
+                    <div class="stats-label">محافظة</div>
+                    <div class="stats-description">تغطي جميع أنحاء الجمهورية</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card">
+                    <div class="stats-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stats-number" data-target="{{ total_candidates|default:
+'1250' }}">0</div>
+                    <div class="stats-label">مرشح</div>
+                    <div class="stats-description">يخدمون الشعب المصري</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card">
+                    <div class="stats-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <div class="stats-number" data-target="{{ total_citizens|default:
+'125000' }}">0</div>
+                    <div class="stats-label">مواطن</div>
+                    <div class="stats-description">مسجل في المنصة</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card">
+                    <div class="stats-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stats-number" data-target="{{ participation_rate|default:
+'85' }}">0</div>
+                    <div class="stats-label">معدل المشاركة</div>
+                    <div class="stats-description">نسبة التفاعل النشط</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Governorates page specific JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    // Enhanced search functionality
+    const searchInput = document.querySelector('.search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const query = this.value;
+            const searchResultsContainer = searchInput.nextElementSibling;
+
+            if (query.length > 0) {
+                // Perform AJAX search
+                fetch(`/api/governorates/search/?q=${query}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        searchResultsContainer.innerHTML = ''; // Clear previous results
+                        if (data.length > 0) {
+                            data.forEach(governorate => {
+                                const resultItem = document.createElement('a');
+                                resultItem.href = `/governorate/${governorate.slug}/`;
+                                resultItem.classList.add('search-result-item', 'd-block', 'p-2', 'border-bottom');
+                                resultItem.textContent = governorate.name;
+                                searchResultsContainer.appendChild(resultItem);
+                            });
+                            searchResultsContainer.style.display = 'block';
+                        } else {
+                            searchResultsContainer.style.display = 'none';
+                        }
+                    })
+                    .catch(error => console.error('Error fetching search results:', error));
+            } else {
+                searchResultsContainer.style.display = 'none';
+            }
+        });
+
+        // Hide search results when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!searchInput.contains(event.target) && !searchInput.nextElementSibling.contains(event.target)) {
+                searchInput.nextElementSibling.style.display = 'none';
+            }
+        });
+    }
+
+    // Stats counter animation
+    const statsCards = document.querySelectorAll('.stats-card');
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.5 // Trigger when 50% of the element is visible
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const target = entry.target.querySelector('.stats-number');
+                const endValue = parseInt(target.dataset.target);
+                const duration = 2000; // 2 seconds
+                let startValue = 0;
+                let startTime = null;
+
+                function animate(currentTime) {
+                    if (!startTime) startTime = currentTime;
+                    const progress = (currentTime - startTime) / duration;
+                    const currentValue = Math.min(progress, 1) * endValue;
+                    target.textContent = Math.floor(currentValue).toLocaleString();
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        target.textContent = endValue.toLocaleString(); // Ensure final value is exact
+                    }
+                }
+                requestAnimationFrame(animate);
+                observer.unobserve(entry.target); // Stop observing once animation starts
+            }
+        });
+    }, observerOptions);
+
+    statsCards.forEach(card => {
+        observer.observe(card);
+    });
+});
+</script>
+{% endblock %}
+

@@ -1,0 +1,410 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}سياسة الخصوصية - نائبك دوت كوم{% endblock %}
+
+{% block meta_description %}سياسة الخصوصية لموقع نائبك دوت كوم - كيف نحمي بياناتك الشخصية{% endblock %}
+
+{% block extra_css %}
+<style>
+    .policy-container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        padding: 40px;
+        margin: 30px 0;
+    }
+    
+    .policy-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: white;
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .policy-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    
+    .policy-subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+    }
+    
+    .section-title {
+        color: var(--primary-color);
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 30px 0 15px 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--primary-color);
+    }
+    
+    .section-content {
+        line-height: 1.8;
+        margin-bottom: 25px;
+        color: #333;
+    }
+    
+    .highlight-box {
+        background: #f8f9fa;
+        border-right: 4px solid var(--primary-color);
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 8px;
+    }
+    
+    .important-note {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 15px 0;
+    }
+    
+    .contact-info {
+        background: var(--primary-color);
+        color: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin: 30px 0;
+        text-align: center;
+    }
+    
+    .last-updated {
+        text-align: center;
+        color: #666;
+        font-style: italic;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+    }
+    
+    .data-types {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+    }
+    
+    .data-type-card {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        border-top: 4px solid var(--primary-color);
+    }
+    
+    .data-type-icon {
+        font-size: 2rem;
+        color: var(--primary-color);
+        margin-bottom: 10px;
+    }
+    
+    .rights-list {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .rights-list li {
+        background: white;
+        margin: 10px 0;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        border-right: 4px solid var(--primary-color);
+    }
+    
+    .rights-list li i {
+        color: var(--primary-color);
+        margin-left: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="policy-header">
+        <h1 class="policy-title">سياسة الخصوصية</h1>
+        <p class="policy-subtitle">نحن نحترم خصوصيتك ونلتزم بحماية بياناتك الشخصية</p>
+    </div>
+    
+    <div class="policy-container">
+        <div class="important-note">
+            <strong>ملاحظة مهمة:</strong> يرجى قراءة سياسة الخصوصية هذه بعناية قبل استخدام موقع نائبك دوت كوم. استخدامك للموقع يعني موافقتك على هذه السياسة.
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-info-circle me-2"></i>
+            مقدمة
+        </h2>
+        <div class="section-content">
+            <p>مرحباً بك في موقع "نائبك دوت كوم"، المنصة الإلكترونية المخصصة لربط المواطنين بالمرشحين لمجلس النواب المصري. نحن نقدر ثقتك بنا ونلتزم بحماية خصوصيتك وأمان بياناتك الشخصية.</p>
+            
+            <p>تحدد سياسة الخصوصية هذه كيفية جمعنا واستخدامنا وحمايتنا ومشاركتنا للمعلومات التي تقدمها لنا عند استخدام موقعنا الإلكتروني وخدماتنا.</p>
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-database me-2"></i>
+            البيانات التي نجمعها
+        </h2>
+        <div class="section-content">
+            <p>نقوم بجمع أنواع مختلفة من البيانات لتوفير وتحسين خدماتنا:</p>
+            
+            <div class="data-types">
+                <div class="data-type-card">
+                    <div class="data-type-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h5>البيانات الشخصية</h5>
+                    <p>الاسم، البريد الإلكتروني، رقم الهاتف، العنوان</p>
+                </div>
+                
+                <div class="data-type-card">
+                    <div class="data-type-icon">
+                        <i class="fas fa-mouse-pointer"></i>
+                    </div>
+                    <h5>بيانات الاستخدام</h5>
+                    <p>كيفية تفاعلك مع الموقع، الصفحات المزارة، الوقت المقضي</p>
+                </div>
+                
+                <div class="data-type-card">
+                    <div class="data-type-icon">
+                        <i class="fas fa-laptop"></i>
+                    </div>
+                    <h5>البيانات التقنية</h5>
+                    <p>عنوان IP، نوع المتصفح، نظام التشغيل، معرف الجهاز</p>
+                </div>
+                
+                <div class="data-type-card">
+                    <div class="data-type-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h5>بيانات التفاعل</h5>
+                    <p>الرسائل، التقييمات، التصويتات، التعليقات</p>
+                </div>
+            </div>
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-cogs me-2"></i>
+            كيف نستخدم بياناتك
+        </h2>
+        <div class="section-content">
+            <p>نستخدم البيانات التي نجمعها للأغراض التالية:</p>
+            
+            <ul class="rights-list">
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <strong>تقديم الخدمات:</strong> توفير منصة للتواصل بين المواطنين والمرشحين
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <strong>تحسين الخدمة:</strong> تطوير وتحسين وظائف الموقع بناءً على استخدامك
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <strong>التواصل:</strong> إرسال الإشعارات المهمة والردود على استفساراتك
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <strong>الأمان:</strong> حماية الموقع من الاستخدام غير المشروع والاحتيال
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <strong>الامتثال القانوني:</strong> الوفاء بالتزاماتنا القانونية والتنظيمية
+                </li>
+            </ul>
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-share-alt me-2"></i>
+            مشاركة البيانات
+        </h2>
+        <div class="section-content">
+            <div class="highlight-box">
+                <strong>التزامنا:</strong> نحن لا نبيع أو نؤجر أو نتاجر ببياناتك الشخصية مع أطراف ثالثة لأغراض تجارية.
+            </div>
+            
+            <p>قد نشارك بياناتك في الحالات التالية فقط:</p>
+            
+            <ul>
+                <li><strong>مع المرشحين:</strong> عند إرسال رسالة لمرشح، سيتمكن من رؤية اسمك ورسالتك</li>
+                <li><strong>مقدمو الخدمات:</strong> شركات تقنية موثوقة تساعدنا في تشغيل الموقع</li>
+                <li><strong>الامتثال القانوني:</strong> عند الطلب من السلطات المختصة وفقاً للقانون</li>
+                <li><strong>حماية الحقوق:</strong> لحماية حقوقنا وحقوق المستخدمين الآخرين</li>
+            </ul>
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-shield-alt me-2"></i>
+            أمان البيانات
+        </h2>
+        <div class="section-content">
+            <p>نتخذ إجراءات أمنية صارمة لحماية بياناتك:</p>
+            
+            <div class="data-types">
+                <div class="data-type-card">
+                    <div class="data-type-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h6>التشفير</h6>
+                    <p>تشفير البيانات أثناء النقل والتخزين</p>
+                </div>
+                
+                <div class="data-type-card">
+                    <div class="data-type-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h6>خوادم آمنة</h6>
+                    <p>استخدام خوادم محمية ومراقبة على مدار الساعة</p>
+                </div>
+                
+                <div class="data-type-card">
+                    <div class="data-type-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h6>الوصول المحدود</h6>
+                    <p>الوصول للبيانات مقتصر على الموظفين المخولين فقط</p>
+                </div>
+                
+                <div class="data-type-card">
+                    <div class="data-type-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <h6>النسخ الاحتياطي</h6>
+                    <p>نسخ احتياطية منتظمة لضمان عدم فقدان البيانات</p>
+                </div>
+            </div>
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-balance-scale me-2"></i>
+            حقوقك
+        </h2>
+        <div class="section-content">
+            <p>لديك الحقوق التالية فيما يتعلق ببياناتك الشخصية:</p>
+            
+            <ul class="rights-list">
+                <li>
+                    <i class="fas fa-eye"></i>
+                    <strong>الحق في المعرفة:</strong> معرفة البيانات التي نجمعها عنك وكيف نستخدمها
+                </li>
+                <li>
+                    <i class="fas fa-download"></i>
+                    <strong>الحق في الوصول:</strong> الحصول على نسخة من بياناتك الشخصية
+                </li>
+                <li>
+                    <i class="fas fa-edit"></i>
+                    <strong>الحق في التصحيح:</strong> تصحيح أي بيانات غير صحيحة أو غير مكتملة
+                </li>
+                <li>
+                    <i class="fas fa-trash"></i>
+                    <strong>الحق في الحذف:</strong> طلب حذف بياناتك الشخصية في ظروف معينة
+                </li>
+                <li>
+                    <i class="fas fa-ban"></i>
+                    <strong>الحق في الاعتراض:</strong> الاعتراض على معالجة بياناتك لأغراض معينة
+                </li>
+                <li>
+                    <i class="fas fa-file-export"></i>
+                    <strong>الحق في النقل:</strong> نقل بياناتك إلى خدمة أخرى بصيغة قابلة للقراءة
+                </li>
+            </ul>
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-cookie-bite me-2"></i>
+            ملفات تعريف الارتباط (Cookies)
+        </h2>
+        <div class="section-content">
+            <p>نستخدم ملفات تعريف الارتباط لتحسين تجربتك على الموقع:</p>
+            
+            <ul>
+                <li><strong>ملفات تعريف ضرورية:</strong> مطلوبة لتشغيل الموقع بشكل صحيح</li>
+                <li><strong>ملفات تعريف الأداء:</strong> تساعدنا في فهم كيفية استخدام الموقع</li>
+                <li><strong>ملفات تعريف الوظائف:</strong> تحفظ تفضيلاتك وإعداداتك</li>
+            </ul>
+            
+            <div class="highlight-box">
+                يمكنك التحكم في ملفات تعريف الارتباط من خلال إعدادات متصفحك، لكن تعطيلها قد يؤثر على وظائف الموقع.
+            </div>
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-child me-2"></i>
+            خصوصية الأطفال
+        </h2>
+        <div class="section-content">
+            <div class="important-note">
+                <strong>تنبيه:</strong> موقعنا غير مخصص للأطفال دون سن 18 عاماً. نحن لا نجمع عمداً معلومات شخصية من الأطفال دون هذا السن.
+            </div>
+            
+            <p>إذا علمنا أننا جمعنا معلومات شخصية من طفل دون سن 18 عاماً، سنقوم بحذف هذه المعلومات فوراً. إذا كنت والداً أو وصياً وتعتقد أن طفلك قدم لنا معلومات شخصية، يرجى التواصل معنا.</p>
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-globe me-2"></i>
+            نقل البيانات الدولي
+        </h2>
+        <div class="section-content">
+            <p>بياناتك تُخزن ومُعالج داخل جمهورية مصر العربية. في حالة نقل البيانات خارج مصر، سنضمن وجود ضمانات مناسبة لحماية بياناتك وفقاً للمعايير الدولية.</p>
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-clock me-2"></i>
+            الاحتفاظ بالبيانات
+        </h2>
+        <div class="section-content">
+            <p>نحتفظ ببياناتك الشخصية للفترة اللازمة لتحقيق الأغراض المحددة في هذه السياسة، أو كما يتطلب القانون:</p>
+            
+            <ul>
+                <li><strong>بيانات الحساب:</strong> طوال فترة نشاط الحساب + 3 سنوات بعد الإغلاق</li>
+                <li><strong>الرسائل والتفاعلات:</strong> 5 سنوات لأغراض الأرشفة والمراجعة</li>
+                <li><strong>البيانات التقنية:</strong> 12 شهراً للتحليل والتحسين</li>
+                <li><strong>بيانات الأمان:</strong> 7 سنوات للامتثال القانوني</li>
+            </ul>
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-edit me-2"></i>
+            تحديث السياسة
+        </h2>
+        <div class="section-content">
+            <p>قد نقوم بتحديث سياسة الخصوصية هذه من وقت لآخر لتعكس التغييرات في ممارساتنا أو لأسباب تشغيلية أو قانونية أو تنظيمية أخرى.</p>
+            
+            <div class="highlight-box">
+                <strong>إشعار التحديثات:</strong> سنقوم بإشعارك بأي تغييرات جوهرية عبر البريد الإلكتروني أو إشعار بارز على الموقع قبل 30 يوماً من دخول التحديث حيز التنفيذ.
+            </div>
+        </div>
+        
+        <div class="contact-info">
+            <h3>
+                <i class="fas fa-envelope me-2"></i>
+                تواصل معنا
+            </h3>
+            <p>إذا كان لديك أي أسئلة حول سياسة الخصوصية هذه أو ممارسات الخصوصية لدينا، يرجى التواصل معنا:</p>
+            
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <p><i class="fas fa-envelope me-2"></i> privacy@naebak.com</p>
+                    <p><i class="fas fa-phone me-2"></i> +20 2 1234 5678</p>
+                </div>
+                <div class="col-md-6">
+                    <p><i class="fas fa-map-marker-alt me-2"></i> القاهرة، جمهورية مصر العربية</p>
+                    <p><i class="fas fa-clock me-2"></i> الأحد - الخميس: 9 صباحاً - 6 مساءً</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="last-updated">
+            آخر تحديث: {{ last_updated|date:"d F Y" }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

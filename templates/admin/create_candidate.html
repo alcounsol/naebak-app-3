@@ -1,0 +1,284 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .create-candidate-hero {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        padding: 60px 0;
+        margin-bottom: 40px;
+    }
+    
+    .form-section {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+    
+    .section-title {
+        color: #28a745;
+        border-bottom: 2px solid #28a745;
+        padding-bottom: 10px;
+        margin-bottom: 25px;
+        font-weight: 600;
+    }
+    
+    .form-control:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    }
+    
+    .btn-create {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        border: none;
+        padding: 12px 40px;
+        font-weight: 600;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-create:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+    }
+    
+    .required-field {
+        color: #dc3545;
+    }
+    
+    .form-help {
+        font-size: 0.875rem;
+        color: #6c757d;
+        margin-top: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="create-candidate-hero">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 mb-3">
+                    <i class="fas fa-user-plus me-3"></i>
+                    إنشاء حساب مرشح جديد
+                </h1>
+                <p class="lead">
+                    إضافة مرشح جديد إلى النظام مع جميع البيانات والمعلومات المطلوبة
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <form method="post" class="needs-validation" novalidate>
+                {% csrf_token %}
+                
+                <!-- Account Information Section -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-user-circle me-2"></i>
+                        معلومات الحساب
+                    </h3>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="username" class="form-label">
+                                اسم المستخدم <span class="required-field">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                            <div class="form-help">سيتم استخدامه لتسجيل الدخول</div>
+                            <div class="invalid-feedback">
+                                يرجى إدخال اسم المستخدم
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">
+                                البريد الإلكتروني <span class="required-field">*</span>
+                            </label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                            <div class="form-help">للتواصل والإشعارات</div>
+                            <div class="invalid-feedback">
+                                يرجى إدخال بريد إلكتروني صحيح
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label">
+                                كلمة المرور <span class="required-field">*</span>
+                            </label>
+                            <input type="password" class="form-control" id="password" name="password" required minlength="8">
+                            <div class="form-help">يجب أن تكون 8 أحرف على الأقل</div>
+                            <div class="invalid-feedback">
+                                كلمة المرور يجب أن تكون 8 أحرف على الأقل
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="confirm_password" class="form-label">
+                                تأكيد كلمة المرور <span class="required-field">*</span>
+                            </label>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                            <div class="form-help">أعد كتابة كلمة المرور</div>
+                            <div class="invalid-feedback">
+                                كلمات المرور غير متطابقة
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Personal Information Section -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-id-card me-2"></i>
+                        المعلومات الشخصية
+                    </h3>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="first_name" class="form-label">الاسم الأول</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="last_name" class="form-label">اسم العائلة</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="candidate_name" class="form-label">
+                            الاسم الكامل للمرشح <span class="required-field">*</span>
+                        </label>
+                        <input type="text" class="form-control" id="candidate_name" name="candidate_name" required>
+                        <div class="form-help">الاسم كما سيظهر في الموقع</div>
+                        <div class="invalid-feedback">
+                            يرجى إدخال الاسم الكامل للمرشح
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="bio" class="form-label">نبذة شخصية</label>
+                        <textarea class="form-control" id="bio" name="bio" rows="4" placeholder="نبذة مختصرة عن المرشح وخبراته..."></textarea>
+                        <div class="form-help">معلومات إضافية عن المرشح</div>
+                    </div>
+                </div>
+                
+                <!-- Electoral Information Section -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-vote-yea me-2"></i>
+                        المعلومات الانتخابية
+                    </h3>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="role" class="form-label">المنصب</label>
+                            <select class="form-control" id="role" name="role">
+                                <option value="مرشح مجلس النواب">مرشح مجلس النواب</option>
+                                <option value="مرشح مجلس الشيوخ">مرشح مجلس الشيوخ</option>
+                                <option value="مرشح محلي">مرشح محلي</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="governorate" class="form-label">المحافظة</label>
+                            <select class="form-control" id="governorate" name="governorate">
+                                <option value="">اختر المحافظة</option>
+                                {% for governorate in governorates %}
+                                    <option value="{{ governorate.id }}">{{ governorate.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="constituency" class="form-label">الدائرة الانتخابية</label>
+                            <input type="text" class="form-control" id="constituency" name="constituency" placeholder="مثال: الدائرة الأولى">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="election_number" class="form-label">الرقم الانتخابي</label>
+                            <input type="text" class="form-control" id="election_number" name="election_number" placeholder="مثال: 101">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="election_symbol" class="form-label">الرمز الانتخابي</label>
+                        <input type="text" class="form-control" id="election_symbol" name="election_symbol" placeholder="مثال: النخلة">
+                        <div class="form-help">الرمز الذي يمثل المرشح في الانتخابات</div>
+                    </div>
+                </div>
+                
+                <!-- Submit Section -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success btn-create btn-lg me-3">
+                        <i class="fas fa-plus me-2"></i>
+                        إنشاء حساب المرشح
+                    </button>
+                    <a href="{% url 'core:admin_panel' %}" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        العودة للوحة التحكم
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+// Form validation
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        var forms = document.getElementsByClassName('needs-validation');
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                // Check password confirmation
+                var password = document.getElementById('password').value;
+                var confirmPassword = document.getElementById('confirm_password').value;
+                var confirmPasswordField = document.getElementById('confirm_password');
+                
+                if (password !== confirmPassword) {
+                    confirmPasswordField.setCustomValidity('كلمات المرور غير متطابقة');
+                } else {
+                    confirmPasswordField.setCustomValidity('');
+                }
+                
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
+
+// Real-time password confirmation check
+document.getElementById('confirm_password').addEventListener('input', function() {
+    var password = document.getElementById('password').value;
+    var confirmPassword = this.value;
+    
+    if (password !== confirmPassword) {
+        this.setCustomValidity('كلمات المرور غير متطابقة');
+    } else {
+        this.setCustomValidity('');
+    }
+});
+</script>
+{% endblock %}
+

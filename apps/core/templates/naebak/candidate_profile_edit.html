@@ -1,0 +1,332 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-container {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-top: 2rem;
+    }
+    .profile-img-preview {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--primary-color);
+        margin-bottom: 1rem;
+    }
+    .banner-img-preview {
+        width: 100%;
+        max-height: 200px;
+        object-fit: cover;
+        border: 3px solid var(--primary-color);
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+    .btn-primary:hover {
+        background-color: var(--primary-dark);
+        border-color: var(--primary-dark);
+    }
+    .section-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+        color: white;
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 2rem 0 1rem 0;
+        text-align: center;
+    }
+    .form-section {
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        background: #f8f9fa;
+    }
+    .image-upload-section {
+        text-align: center;
+        padding: 2rem;
+        border: 2px dashed var(--primary-color);
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        background: #f8fff8;
+    }
+    .upload-btn {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .upload-btn:hover {
+        background: var(--primary-dark);
+    }
+    .social-links-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="my-4 text-center">{{ page_title }}</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="form-container">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <!-- صور الملف الشخصي والبانر -->
+                    <div class="section-header">
+                        <h4><i class="fas fa-images"></i> الصور الشخصية</h4>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="image-upload-section">
+                                <h6>الصورة الشخصية</h6>
+                                {% if candidate.profile_picture %}
+                                    <img src="{{ candidate.profile_picture.url }}" alt="صورة الملف الشخصي" class="profile-img-preview" id="profileImagePreview">
+                                {% else %}
+                                    <div class="profile-img-preview d-flex align-items-center justify-content-center" id="profileImagePreview" style="background: #f8f9fa;">
+                                        <i class="fas fa-user fa-3x text-muted"></i>
+                                    </div>
+                                {% endif %}
+                                <input type="file" class="d-none" id="profile_picture" name="profile_picture" accept="image/*">
+                                <label for="profile_picture" class="upload-btn">
+                                    <i class="fas fa-camera"></i> تغيير الصورة الشخصية
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="image-upload-section">
+                                <h6>صورة البانر</h6>
+                                {% if candidate.banner_image %}
+                                    <img src="{{ candidate.banner_image.url }}" alt="صورة البانر" class="banner-img-preview" id="bannerImagePreview">
+                                {% else %}
+                                    <div class="banner-img-preview d-flex align-items-center justify-content-center" id="bannerImagePreview" style="background: #f8f9fa;">
+                                        <i class="fas fa-image fa-3x text-muted"></i>
+                                    </div>
+                                {% endif %}
+                                <input type="file" class="d-none" id="banner_image" name="banner_image" accept="image/*">
+                                <label for="banner_image" class="upload-btn">
+                                    <i class="fas fa-image"></i> تغيير صورة البانر
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- المعلومات الأساسية -->
+                    <div class="section-header">
+                        <h4><i class="fas fa-user"></i> المعلومات الأساسية</h4>
+                    </div>
+                    
+                    <div class="form-section">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">الاسم الكامل</label>
+                                    <input type="text" class="form-control" id="name" name="name" value="{{ candidate.name }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="role" class="form-label">المنصب</label>
+                                    <input type="text" class="form-control" id="role" name="role" value="{{ candidate.role }}">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="election_number" class="form-label">الرقم الانتخابي</label>
+                                    <input type="text" class="form-control" id="election_number" name="election_number" value="{{ candidate.election_number }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="election_symbol" class="form-label">الرمز الانتخابي</label>
+                                    <input type="text" class="form-control" id="election_symbol" name="election_symbol" value="{{ candidate.election_symbol }}">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="phone_number" class="form-label">رقم الهاتف</label>
+                                    <input type="tel" class="form-control" id="phone_number" name="phone_number" value="{{ candidate.phone_number }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="constituency" class="form-label">الدائرة الانتخابية</label>
+                                    <input type="text" class="form-control" id="constituency" name="constituency" value="{{ candidate.constituency }}">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="bio" class="form-label">نبذة شخصية</label>
+                            <textarea class="form-control" id="bio" name="bio" rows="4" placeholder="اكتب نبذة شخصية موجزة عنك...">{{ candidate.bio }}</textarea>
+                        </div>
+                    </div>
+
+                    <!-- البرنامج الانتخابي والرسائل -->
+                    <div class="section-header">
+                        <h4><i class="fas fa-file-alt"></i> البرنامج الانتخابي والرسائل</h4>
+                    </div>
+                    
+                    <div class="form-section">
+                        <div class="mb-3">
+                            <label for="electoral_program" class="form-label">البرنامج الانتخابي</label>
+                            <textarea class="form-control" id="electoral_program" name="electoral_program" rows="6" placeholder="اكتب برنامجك الانتخابي المفصل هنا...">{{ candidate.electoral_program }}</textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="message_to_voters" class="form-label">كلمة للمنتخبين</label>
+                            <textarea class="form-control" id="message_to_voters" name="message_to_voters" rows="4" placeholder="اكتب كلمة موجزة لمنتخبيك...">{{ candidate.message_to_voters }}</textarea>
+                        </div>
+                    </div>
+
+                    <!-- الروابط الاجتماعية والمحتوى -->
+                    <div class="section-header">
+                        <h4><i class="fas fa-link"></i> الروابط الاجتماعية والمحتوى</h4>
+                    </div>
+                    
+                    <div class="form-section">
+                        <div class="social-links-grid">
+                            <div class="mb-3">
+                                <label for="youtube_video_url" class="form-label">
+                                    <i class="fab fa-youtube text-danger"></i> رابط فيديو يوتيوب
+                                </label>
+                                <input type="url" class="form-control" id="youtube_video_url" name="youtube_video_url" value="{{ candidate.youtube_video_url }}" placeholder="https://www.youtube.com/watch?v=...">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="facebook_url" class="form-label">
+                                    <i class="fab fa-facebook text-primary"></i> رابط فيسبوك
+                                </label>
+                                <input type="url" class="form-control" id="facebook_url" name="facebook_url" value="{{ candidate.facebook_url }}" placeholder="https://www.facebook.com/...">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="twitter_url" class="form-label">
+                                    <i class="fab fa-twitter text-info"></i> رابط تويتر
+                                </label>
+                                <input type="url" class="form-control" id="twitter_url" name="twitter_url" value="{{ candidate.twitter_url }}" placeholder="https://twitter.com/...">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="website_url" class="form-label">
+                                    <i class="fas fa-globe text-success"></i> الموقع الشخصي
+                                </label>
+                                <input type="url" class="form-control" id="website_url" name="website_url" value="{{ candidate.website_url }}" placeholder="https://www.example.com">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg px-5">
+                            <i class="fas fa-save"></i> حفظ جميع التغييرات
+                        </button>
+                        <a href="{% url 'naebak:candidate_dashboard' %}" class="btn btn-secondary btn-lg px-5 ms-3">
+                            <i class="fas fa-arrow-right"></i> العودة للوحة التحكم
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Image preview functionality
+    function readURL(input, previewId) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.querySelector(previewId);
+                if (preview.tagName === 'IMG') {
+                    preview.src = e.target.result;
+                } else {
+                    // Replace div with img element
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = preview.className;
+                    img.alt = preview.id === 'profileImagePreview' ? 'صورة الملف الشخصي' : 'صورة البانر';
+                    preview.parentNode.replaceChild(img, preview);
+                    img.id = preview.id;
+                }
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    // Event listeners for file inputs
+    document.getElementById('profile_picture').addEventListener('change', function() {
+        readURL(this, '#profileImagePreview');
+    });
+
+    document.getElementById('banner_image').addEventListener('change', function() {
+        readURL(this, '#bannerImagePreview');
+    });
+
+    // Form validation
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const name = document.getElementById('name').value.trim();
+        if (!name) {
+            e.preventDefault();
+            alert('يرجى إدخال الاسم الكامل');
+            document.getElementById('name').focus();
+            return false;
+        }
+    });
+
+    // Character counter for textareas
+    function addCharacterCounter(textareaId, maxLength) {
+        const textarea = document.getElementById(textareaId);
+        const counter = document.createElement('small');
+        counter.className = 'text-muted';
+        counter.style.float = 'left';
+        textarea.parentNode.appendChild(counter);
+        
+        function updateCounter() {
+            const remaining = maxLength - textarea.value.length;
+            counter.textContent = `${remaining} حرف متبقي`;
+            if (remaining < 50) {
+                counter.className = 'text-warning';
+            } else if (remaining < 0) {
+                counter.className = 'text-danger';
+            } else {
+                counter.className = 'text-muted';
+            }
+        }
+        
+        textarea.addEventListener('input', updateCounter);
+        updateCounter();
+    }
+
+    // Add character counters
+    addCharacterCounter('bio', 500);
+    addCharacterCounter('electoral_program', 2000);
+    addCharacterCounter('message_to_voters', 500);
+</script>
+{% endblock %}
+
