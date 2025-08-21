@@ -6,6 +6,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from .diag import env_check # مؤقت، لإعدادات التشخيص
+
 
 urlpatterns = [
     # لوحة الإدارة
@@ -20,6 +22,8 @@ urlpatterns = [
     path("messages/", include("apps.messaging.urls")),
     path("news/", include("apps.news.urls")),
     path("voting/", include("apps.voting.urls")),
+
+    path("diag/env", env_check),  # مؤقت
 ]
 
 # إضافة URLs للملفات الثابتة والوسائط في بيئة التطوير
@@ -36,3 +40,4 @@ if settings.DEBUG:
 admin.site.site_header = "إدارة موقع نائبك دوت كوم"
 admin.site.site_title = "نائبك دوت كوم"
 admin.site.index_title = "لوحة التحكم الرئيسية"
+
