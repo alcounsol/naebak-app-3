@@ -143,3 +143,12 @@ if "debug_toolbar" in INSTALLED_APPS:
     INSTALLED_APPS.remove("debug_toolbar")
 if "debug_toolbar.middleware.DebugToolbarMiddleware" in MIDDLEWARE:
     MIDDLEWARE.remove("debug_toolbar.middleware.DebugToolbarMiddleware")
+
+
+# تأكد إن Django بيثق في الـ proxy الخاص بـ Cloud Run
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+USE_X_FORWARDED_HOST = True
+
+# تأكيد Cookies آمنة
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
