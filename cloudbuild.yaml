@@ -1,28 +1,47 @@
-steps:
-  # Build container image using the Dockerfile at project root
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'build'
-      - '-t'
-      - 'europe-west1-docker.pkg.dev/stalwart-star-468902-j1/naebak-repo/naebak-app:latest'
-      - '.'
-      - '-f'
-      - 'Dockerfile'
-    id: 'Build Image'
+substitutions:
+  _REGION: europe-west1
+  _REPO: naebak-repo
+  _IMAGE: naebak-app
 
-  # Push the container image to Artifact Registry
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'europe-west1-docker.pkg.dev/stalwart-star-468902-j1/naebak-repo/naebak-app:latest']
-    id: 'Push Image'
-
-# Define the image to be pushed (for build history)
-images:
-  - 'europe-west1-docker.pkg.dev/stalwart-star-468902-j1/naebak-repo/naebak-app:latest'
-
-# Build timeout
-timeout: '1200s'
-
-# Logging options
 options:
   logging: CLOUD_LOGGING_ONLY
 
+steps:
+  # 1) Build Docker image
+  - name: gcr.io/cloud-builders/docker
+    id: Build Image
+    args:
+      [
+        "build",
+        "-t",
+        "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_IMAGE}:$SHORT_SHA",
+        "."
+      ]
+
+  # 2) Push image to Artifact Registry
+  - name: gcr.io/cloud-builders/docker
+    id: Push Image
+    args:
+      [
+        "push",
+        "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_IMAGE}:$SHORT_SHA"
+      ]
+
+  # (اختياري) 3) Deploy مباشرة على Cloud Run
+  # لو عاوز النشر يتم بعد كل push، فكّ الكومنت تحت
+  # - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+  #   id: Deploy to Cloud Run
+  #   entrypoint: gcloud
+  #   args:
+  #     [
+  #       "run", "deploy", "naebak-web",
+  #       "--image", "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_IMAGE}:$SHORT_SHA",
+  #       "--region", "${_REGION}",
+  #       "--platform", "managed",
+  #       "--allow-unauthenticated",
+  #       "--port", "8080",
+  #       "--service-account", "PROJECT_NUMBER-compute@developer.gserviceaccount.com"
+  #     ]
+
+images:
+  - "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_IMAGE}:$SHORT_SHA"
